@@ -1,0 +1,138 @@
+@import '../MyMeme.less';
+
+.mm-gen {
+  position: absolute;
+  inset: 0;
+  padding: 8px;
+  display: flex;
+  animation: mm-fade-in 0.2s ease-out;
+
+  &__win {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    gap: 16px;
+  }
+
+  // ── Spinner ─────────────────────────────────
+  &__spinner {
+    margin-bottom: 8px;
+  }
+
+  &__spinner-frame {
+    width: 48px;
+    height: 48px;
+    position: relative;
+  }
+
+  &__spinner-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: @ink;
+    animation: mm-spinner-fade 1s infinite;
+
+    &:nth-child(1) { top: 0; left: 21px; }
+    &:nth-child(2) { top: 6px; left: 35px; }
+    &:nth-child(3) { top: 21px; left: 42px; }
+    &:nth-child(4) { top: 35px; left: 35px; }
+    &:nth-child(5) { top: 42px; left: 21px; }
+    &:nth-child(6) { top: 35px; left: 6px; }
+    &:nth-child(7) { top: 21px; left: 0; }
+    &:nth-child(8) { top: 6px; left: 6px; }
+  }
+
+  &__text {
+    font-family: @mono;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: @ink;
+  }
+
+  &__tip {
+    font-family: @mono;
+    font-size: 10px;
+    color: @ink-faint;
+  }
+
+  // ── Progress bar ────────────────────────────
+  &__progress {
+    width: 200px;
+    height: 8px;
+    border: 1.5px solid @ink;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  &__progress-bar {
+    height: 100%;
+    background: @ink;
+    animation: mm-progress 45s linear forwards;
+  }
+
+  &__error-icon {
+    width: 48px;
+    height: 48px;
+    border: @border;
+    font-family: @mono;
+    font-size: 28px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  &__error-text {
+    font-family: @mono;
+    font-size: 13px;
+    color: @ink;
+    text-align: center;
+    max-width: 280px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  &__retry {
+    min-height: 48px;
+    padding: 12px 32px;
+    font-size: 15px;
+    background: @ink;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  &__cancel {
+    font-family: @mono;
+    font-size: 13px;
+    color: @ink-light;
+    background: none;
+    border: 1.5px solid @ink-faint;
+    padding: 10px 24px;
+    min-height: 44px;
+    margin-top: 8px;
+    cursor: pointer;
+    touch-action: manipulation;
+
+    &:active { color: @ink; border-color: @ink; }
+  }
+}
+
+@keyframes mm-spinner-fade {
+  0%, 100% { opacity: 0.15; }
+  12% { opacity: 1; }
+}
+
+@keyframes mm-progress {
+  from { width: 0; }
+  to { width: 90%; }
+}
