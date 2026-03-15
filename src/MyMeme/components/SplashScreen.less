@@ -1,0 +1,55 @@
+@import '../MyMeme.less';
+
+.mm-splash {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: @bg;
+  background-image:
+    linear-gradient(@grid-color 1px, transparent 1px),
+    linear-gradient(90deg, @grid-color 1px, transparent 1px);
+  background-size: @grid-size @grid-size;
+  pointer-events: none;
+  user-select: none;
+  touch-action: none;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+
+  &--fading {
+    opacity: 0;
+  }
+
+  &__img {
+    width: min(72%, 300px);
+    aspect-ratio: 1;
+    border: @border;
+    box-shadow: 4px 4px 0 0 @ink;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+
+    &--visible {
+      opacity: 1;
+    }
+  }
+
+  &__bar-track {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  &__bar-fill {
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    transition: width 0.35s ease;
+  }
+}

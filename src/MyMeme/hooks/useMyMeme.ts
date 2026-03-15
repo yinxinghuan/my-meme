@@ -1,0 +1,125 @@
+import { useState, useCallback, useRef } from 'react';
+import type { AppPhase, Character, MemeStyle } from '../types';
+import { MEME_STYLES, CHARACTER_PROMPTS } from '../templates';
+
+import avatarCrisvelita from '../img/avatars/crisvelita.png';
+import avatarAlgram from '../img/avatars/algram.png';
+import avatarJenny from '../img/avatars/jenny.png';
+import avatarJmf from '../img/avatars/jmf.png';
+import avatarGhostpixel from '../img/avatars/ghostpixel.png';
+import avatarIsaya from '../img/avatars/isaya.png';
+import avatarIsabel from '../img/avatars/isabel.png';
+
+const R2 = 'https://images.aiwaves.tech/mymeme/avatars';
+
+const DEFAULT_CHARACTERS: Character[] = [
+  { id: 'crisvelita', name: 'Crisvelita', avatar: avatarCrisvelita, refUrl: `${R2}/crisvelita.png` },
+  { id: 'algram', name: 'Algram', avatar: avatarAlgram, refUrl: `${R2}/algram.png` },
+  { id: 'jenny', name: 'Jenny', avatar: avatarJenny, refUrl: `${R2}/jenny.png` },
+  { id: 'jmf', name: 'JM\u00B7F', avatar: avatarJmf, refUrl: `${R2}/jmf.png` },
+  { id: 'ghostpixel', name: 'ghostpixel', avatar: avatarGhostpixel, refUrl: `${R2}/ghostpixel.png` },
+  { id: 'isaya', name: 'Isaya', avatar: avatarIsaya, refUrl: `${R2}/isaya.png` },
+  { id: 'isabel', name: 'Isabel', avatar: avatarIsabel, refUrl: `${R2}/isabel.png` },
+];
+
+const API_URL = 'http://aiservice.wdabuliu.com:8019/genl_image';
+const USER_ID = 123456;
+
+export function useMyMeme() {
+  const [phase, setPhase] = useState<AppPhase>('home');
+  const [character, setCharacter] = useState<Character>(DEFAULT_CHARACTERS[0]);
+  const [showCharSelect, setShowCharSelect] = useState(false);
+  const [selectedStyle, setSelectedStyle] = useState<MemeStyle | null>(null);
+  const [resultImage, setResultImage] = useState<string | null>(null);
+  const [generating, setGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+
+  // ── Build prompt ────────────────────────────────────
+  const buildPrompt = useCallback((style: MemeStyle, char: Character) => {
+    const charDesc = CHARACTER_PROMPTS[char.id] || char.name;
+    return style.promptTemplate.replace(/\{character\}/g, charDesc);
+  }, []);
+
+  // ── Generate meme (one-tap) ─────────────────────────
+  const generateMeme = useCallback(async (style?: MemeStyle) => {
+    const s = style || selectedStyle;
+    if (!s) return;
+
+    setSelectedStyle(s);
+    setGenerating(true);
+    setError(null);
+    setResultImage(null);
+    setPhase('generating');
+
+    const prompt = buildPrompt(s, character);
+    console.log('[MyMeme] Prompt:', prompt);
+
+    try {
+      abortRef.current = new AbortController();
+      const resp = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: '',
+          params: { prompt, url: character.refUrl, user_id: USER_ID },
+        }),
+        signal: abortRef.current.signal,
+      });
+
+      const data = await resp.json();
+      console.log('[MyMeme] Response:', data);
+      if (data.code === 200 && data.url) {
+        setResultImage(data.url);
+        setPhase('result');
+      } else if (data.code === 429) {
+        throw new Error('Too fast! Please wait ~60s and try again.');
+      } else {
+        throw new Error(data.message || `API error code: ${data.code}`);
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'AbortError') return;
+      const msg = err instanceof Error ? err.message : 'Generation failed';
+      console.error('[MyMeme] Error:', msg);
+      setError(msg);
+      // Stay on generating screen so user can see error and retry
+      setPhase('generating');
+    } finally {
+      setGenerating(false);
+    }
+  }, [selectedStyle, character, buildPrompt]);
+
+  // ── Navigation ──────────────────────────────────────
+  const goHome = useCallback(() => {
+    abortRef.current?.abort();
+    setPhase('home');
+    setSelectedStyle(null);
+    setResultImage(null);
+    setError(null);
+  }, []);
+
+  // ── Character selection ─────────────────────────────
+  const openCharSelect = useCallback(() => setShowCharSelect(true), []);
+  const closeCharSelect = useCallback(() => setShowCharSelect(false), []);
+  const pickCharacter = useCallback((char: Character) => {
+    setCharacter(char);
+    setShowCharSelect(false);
+  }, []);
+
+  return {
+    phase,
+    character,
+    characters: DEFAULT_CHARACTERS,
+    showCharSelect,
+    selectedStyle,
+    styles: MEME_STYLES,
+    resultImage,
+    generating,
+    error,
+    generateMeme,
+    goHome,
+    openCharSelect,
+    closeCharSelect,
+    pickCharacter,
+  };
+}

@@ -1,0 +1,256 @@
+@import '../MyMeme.less';
+
+.mm-home {
+  position: absolute;
+  inset: 0;
+  padding: 8px;
+  animation: mm-fade-in 0.3s ease-out;
+  display: flex;
+
+  &__win {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 14px 12px !important;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  // ── Header ────────────────────────────────
+  &__header {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  &__title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  &__brace {
+    font-family: @sans;
+    font-weight: 300;
+    font-size: 30px;
+    color: @ink-light;
+    line-height: 1;
+  }
+
+  &__title-text {
+    font-family: @sans;
+    font-weight: 900;
+    font-size: 30px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  &__subtitle {
+    font-family: @mono;
+    font-size: 11px;
+    color: @ink-light;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  // ── Character card ────────────────────────
+  &__char {
+    padding: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 0 @ink;
+    touch-action: manipulation;
+
+    &:active {
+      box-shadow: 1px 1px 0 0 @ink;
+      transform: translate(2px, 2px);
+    }
+  }
+
+  &__char-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__char-avatar {
+    width: 56px;
+    height: 56px;
+    border: @border;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: @bg;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+  }
+
+  &__char-info { flex: 1; min-width: 0; }
+
+  &__char-name {
+    font-family: @sans;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  &__char-meta {
+    font-family: @mono;
+    font-size: 10px;
+    color: @ink-light;
+    letter-spacing: 0.04em;
+  }
+
+  &__char-beta {
+    font-family: @mono;
+    font-size: 9px;
+    color: @ink-faint;
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+
+  &__beta-tag {
+    display: inline-block;
+    font-family: @mono;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: @ink-light;
+    border: 1px dashed @ink-faint;
+    padding: 3px 10px;
+    margin-top: 8px;
+  }
+
+  // ── Meme list (flat, no categories) ────────
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  // ── Meme card — single column, large ──────
+  &__meme {
+    overflow: hidden;
+    box-shadow: 3px 3px 0 0 @ink;
+  }
+
+  // Large preview image — full width
+  &__meme-preview {
+    width: 100%;
+    border-bottom: @border;
+    background: @bg;
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none;
+    }
+
+    &--placeholder {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: @hatch-svg;
+      background-size: 10px 10px;
+      opacity: 0.8;
+    }
+
+    &-inner {
+      background: #fff;
+      padding: 16px;
+    }
+
+    &-icon {
+      font-size: 28px;
+      color: @ink-faint;
+    }
+  }
+
+  // Bottom bar: name + desc + generate button
+  &__meme-bottom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  &__meme-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__meme-name {
+    font-family: @sans;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.3;
+    margin-bottom: 2px;
+  }
+
+  &__meme-desc {
+    font-family: @mono;
+    font-size: 10px;
+    color: @ink-light;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+  }
+
+  &__meme-btn {
+    flex-shrink: 0;
+    font-family: @mono;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 10px 18px;
+    min-height: 44px;
+    border: @border;
+    background: @ink;
+    color: #fff;
+    cursor: pointer;
+    touch-action: manipulation;
+    box-shadow: 2px 2px 0 0 @ink;
+
+    &:active {
+      box-shadow: 0 0 0 0;
+      transform: translate(2px, 2px);
+    }
+  }
+
+  // ── Footer ────────────────────────────────
+  &__footer {
+    padding: 16px 0 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__footer-logo {
+    width: 18px;
+    height: 18px;
+    filter: invert(1);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  &__footer-text {
+    font-family: @mono;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    color: @ink-faint;
+  }
+}

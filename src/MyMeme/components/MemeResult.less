@@ -1,0 +1,86 @@
+@import '../MyMeme.less';
+
+.mm-result {
+  position: absolute;
+  inset: 0;
+  padding: 8px;
+  animation: mm-fade-in 0.25s ease-out;
+  display: flex;
+
+  &__win {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 14px 12px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  &__image-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  &__image {
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    border: @border;
+    box-shadow: 3px 3px 0 0 @ink;
+    pointer-events: none;
+  }
+
+  &__actions {
+    width: 100%;
+    max-width: 360px;
+  }
+
+  &__save {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    min-height: 52px;
+    background: @ink;
+    color: #fff;
+    margin-bottom: 10px;
+
+    &--saved {
+      background: #2d8f2d;
+    }
+  }
+
+  &__secondary {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__nav-btn {
+    flex: 1;
+    font-family: @mono;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: @ink;
+    background: #fff;
+    border: 1.5px solid @ink;
+    padding: 10px 14px;
+    min-height: 44px;
+    cursor: pointer;
+    touch-action: manipulation;
+    text-align: center;
+    &:active { background: @ink; color: #fff; }
+  }
+}
