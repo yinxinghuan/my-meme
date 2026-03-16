@@ -82,5 +82,11 @@
     touch-action: manipulation;
     text-align: center;
     &:active { background: @ink; color: #fff; }
+
+    &--disabled {
+      color: @ink-faint;
+      border-color: @ink-faint;
+      pointer-events: none;
+    }
   }
 }

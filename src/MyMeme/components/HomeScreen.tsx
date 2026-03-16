@@ -5,12 +5,14 @@ import './HomeScreen.less';
 interface Props {
   character: Character;
   styles: MemeStyle[];
+  cooldownLeft: number;
   onGenerate: (style: MemeStyle) => void;
   onOpenCharSelect: () => void;
   logoSrc: string;
 }
 
-export default function HomeScreen({ character, styles, onGenerate, onOpenCharSelect, logoSrc }: Props) {
+export default function HomeScreen({ character, styles, cooldownLeft, onGenerate, onOpenCharSelect, logoSrc }: Props) {
+  const onCooldown = cooldownLeft > 0;
   return (
     <div className="mm-home">
       <div className="mm-home__win mm-win">
@@ -71,10 +73,10 @@ export default function HomeScreen({ character, styles, onGenerate, onOpenCharSe
                     <div className="mm-home__meme-desc">{t(style.descKey)}</div>
                   </div>
                   <button
-                    className="mm-home__meme-btn"
-                    onPointerDown={() => onGenerate(style)}
+                    className={`mm-home__meme-btn ${onCooldown ? 'mm-home__meme-btn--disabled' : ''}`}
+                    onPointerDown={() => !onCooldown && onGenerate(style)}
                   >
-                    {'\u26A1'} 生成
+                    {onCooldown ? `${cooldownLeft}s` : '\u26A1 生成'}
                   </button>
                 </div>
               </div>
