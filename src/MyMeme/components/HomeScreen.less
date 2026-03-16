@@ -262,6 +262,29 @@
     pointer-events: none;
   }
 
+  // ── Image viewer overlay ───────────────────
+  &__viewer {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    cursor: pointer;
+    animation: mm-fade-in 0.15s ease-out;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border: 2px solid #fff;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+      pointer-events: none;
+    }
+  }
+
   &__footer-text {
     font-family: @mono;
     font-size: 9px;

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { t } from '../i18n';
 import type { Character, MemeStyle } from '../types';
 import './HomeScreen.less';
@@ -14,6 +15,7 @@ interface Props {
 
 export default function HomeScreen({ character, styles, cooldownLeft, onEdit, onQuickGenerate, onOpenCharSelect, logoSrc }: Props) {
   const onCooldown = cooldownLeft > 0;
+  const [viewImage, setViewImage] = useState<string | null>(null);
   return (
     <div className="mm-home">
       <div className="mm-home__win mm-win">
@@ -58,7 +60,10 @@ export default function HomeScreen({ character, styles, cooldownLeft, onEdit, on
             {styles.map(style => (
               <div key={style.id} className="mm-home__meme mm-card">
                 {style.preview && (
-                  <div className="mm-home__meme-preview" onPointerDown={() => onEdit(style)}>
+                  <div
+                    className="mm-home__meme-preview"
+                    onPointerDown={() => setViewImage(style.preview!)}
+                  >
                     <img src={style.preview} alt={t(style.nameKey)} draggable={false} />
                   </div>
                 )}
@@ -99,6 +104,13 @@ export default function HomeScreen({ character, styles, cooldownLeft, onEdit, on
           <span>{styles.length} MEMES</span>
         </div>
       </div>
+
+      {/* Image viewer overlay */}
+      {viewImage && (
+        <div className="mm-home__viewer" onPointerDown={() => setViewImage(null)}>
+          <img src={viewImage} alt="" draggable={false} />
+        </div>
+      )}
     </div>
   );
 }
