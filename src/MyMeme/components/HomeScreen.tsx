@@ -57,15 +57,9 @@ export default function HomeScreen({ character, styles, cooldownLeft, onEdit, on
           <div className="mm-home__list">
             {styles.map(style => (
               <div key={style.id} className="mm-home__meme mm-card">
-                {style.preview ? (
-                  <div className="mm-home__meme-preview">
+                {style.preview && (
+                  <div className="mm-home__meme-preview" onPointerDown={() => onEdit(style)}>
                     <img src={style.preview} alt={t(style.nameKey)} draggable={false} />
-                  </div>
-                ) : (
-                  <div className="mm-home__meme-preview mm-home__meme-preview--placeholder">
-                    <div className="mm-home__meme-preview-inner">
-                      <span className="mm-home__meme-preview-icon">{'\u25B6'}</span>
-                    </div>
                   </div>
                 )}
                 <div className="mm-home__meme-bottom">
@@ -77,7 +71,7 @@ export default function HomeScreen({ character, styles, cooldownLeft, onEdit, on
                     className="mm-home__meme-btn mm-home__meme-btn--edit"
                     onPointerDown={() => onEdit(style)}
                   >
-                    {'\u270E'}
+                    编辑
                   </button>
                   <button
                     className={`mm-home__meme-btn ${onCooldown ? 'mm-home__meme-btn--disabled' : ''}`}
