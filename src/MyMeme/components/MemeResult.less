@@ -40,7 +40,10 @@
     height: auto;
     border: @border;
     box-shadow: 3px 3px 0 0 @ink;
-    // Allow long-press to save on mobile
+    // Override global user-select:none to allow long-press save
+    user-select: auto;
+    -webkit-user-select: auto;
+    -webkit-touch-callout: default;
   }
 
   &__hint {
