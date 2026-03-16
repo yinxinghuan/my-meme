@@ -45,6 +45,7 @@ export default function MyMeme() {
 
       {splashDone && state.phase === 'generating' && (
         <GeneratingScreen
+          avatarSrc={state.character.avatar}
           error={state.error}
           generating={state.generating}
           onRetry={() => state.generateMeme()}

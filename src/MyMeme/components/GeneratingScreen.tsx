@@ -2,13 +2,14 @@ import { t } from '../i18n';
 import './GeneratingScreen.less';
 
 interface Props {
+  avatarSrc: string;
   error: string | null;
   generating: boolean;
   onRetry: () => void;
   onCancel: () => void;
 }
 
-export default function GeneratingScreen({ error, generating, onRetry, onCancel }: Props) {
+export default function GeneratingScreen({ avatarSrc, error, generating, onRetry, onCancel }: Props) {
   return (
     <div className="mm-gen">
       <div className="mm-gen__win mm-win">
@@ -30,7 +31,9 @@ export default function GeneratingScreen({ error, generating, onRetry, onCancel 
             </>
           ) : (
             <>
-              <div className="mm-gen__spinner" />
+              <div className="mm-gen__avatar">
+                <img src={avatarSrc} alt="" draggable={false} />
+              </div>
               <div className="mm-gen__text">{t('generating.wait')}</div>
               <div className="mm-gen__tip">{t('generating.tip')}</div>
               {generating && (
