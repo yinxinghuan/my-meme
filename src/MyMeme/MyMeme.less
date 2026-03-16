@@ -130,6 +130,31 @@
     touch-action: manipulation;
   }
 
+  // Back button — larger, with shadow
+  &__back-btn {
+    width: 36px;
+    height: 30px;
+    border: @border;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: @sans;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    background: #fff;
+    cursor: pointer;
+    flex-shrink: 0;
+    z-index: 1;
+    touch-action: manipulation;
+    box-shadow: 2px 2px 0 0 @ink;
+
+    &:active {
+      box-shadow: none;
+      transform: translate(2px, 2px);
+    }
+  }
+
   // Hatched fill area (like address bar background)
   &__hatch {
     flex: 1;

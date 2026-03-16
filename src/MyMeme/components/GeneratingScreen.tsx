@@ -14,7 +14,7 @@ export default function GeneratingScreen({ avatarSrc, error, generating, onRetry
     <div className="mm-gen">
       <div className="mm-gen__win mm-win">
         <div className="mm-win__titlebar">
-          <div className="mm-win__ctrl-btn" onPointerDown={onCancel}>X</div>
+          <div className="mm-win__back-btn" onPointerDown={onCancel}>{'\u2039'}</div>
           <div className="mm-win__hatch" />
           <div className="mm-win__title">{t('generating.title')}</div>
         </div>

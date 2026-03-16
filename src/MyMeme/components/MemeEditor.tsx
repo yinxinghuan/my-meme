@@ -24,7 +24,7 @@ export default function MemeEditor({
     <div className="mm-editor">
       <div className="mm-editor__win mm-win">
         <div className="mm-win__titlebar">
-          <div className="mm-win__ctrl-btn" onPointerDown={onBack}>X</div>
+          <div className="mm-win__back-btn" onPointerDown={onBack}>{'\u2039'}</div>
           <div className="mm-win__hatch" />
           <div className="mm-win__title">{t(style.nameKey)}</div>
         </div>

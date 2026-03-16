@@ -80,7 +80,7 @@ export default function MemeResult({ imageUrl, cooldownLeft, onRetry, onBack, on
     <div className="mm-result">
       <div className="mm-result__win mm-win">
         <div className="mm-win__titlebar">
-          <div className="mm-win__ctrl-btn" onPointerDown={onHome}>X</div>
+          <div className="mm-win__back-btn" onPointerDown={onHome}>{'\u2039'}</div>
           <div className="mm-win__hatch" />
           <div className="mm-win__title">{t('result.title')}</div>
         </div>
