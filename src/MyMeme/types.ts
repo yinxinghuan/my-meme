@@ -12,6 +12,8 @@ export interface MemeStyle {
   nameKey: string;
   descKey: string;
   category: 'work' | 'daily' | 'social' | 'tech';
-  promptTemplate: string;       // full prompt with {character} placeholder
+  promptTemplate: string;       // prompt with {character}, {scene1}, {scene2}
+  defaultScene1: string;        // default left panel / scene 1 text
+  defaultScene2: string;        // default right panel / scene 2 text
   preview?: string;             // preview image import
 }
