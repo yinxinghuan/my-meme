@@ -12,6 +12,11 @@ const MESSAGES: Record<string, Record<Locale, string>> = {
   'cat.social': { zh: '社交', en: 'SOCIAL' },
   'cat.tech': { zh: '技术', en: 'TECH' },
 
+  'editor.scene1': { zh: '左格场景', en: 'LEFT PANEL' },
+  'editor.scene2': { zh: '右格场景', en: 'RIGHT PANEL' },
+  'editor.generate': { zh: '生成 MEME', en: 'GENERATE MEME' },
+  'editor.wait': { zh: '冷却中', en: 'COOLDOWN' },
+
   'generating.title': { zh: 'GENERATING_', en: 'GENERATING_' },
   'generating.wait': { zh: 'AI 正在创作中...', en: 'AI is creating...' },
   'generating.tip': { zh: '大约需要 30-60 秒', en: '~30-60 seconds' },

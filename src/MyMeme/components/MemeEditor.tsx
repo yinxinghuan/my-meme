@@ -1,0 +1,82 @@
+import { t } from '../i18n';
+import type { Character, MemeStyle } from '../types';
+import './MemeEditor.less';
+
+interface Props {
+  style: MemeStyle;
+  character: Character;
+  scene1: string;
+  scene2: string;
+  cooldownLeft: number;
+  onScene1Change: (v: string) => void;
+  onScene2Change: (v: string) => void;
+  onGenerate: () => void;
+  onBack: () => void;
+}
+
+export default function MemeEditor({
+  style, character, scene1, scene2, cooldownLeft,
+  onScene1Change, onScene2Change, onGenerate, onBack,
+}: Props) {
+  const onCooldown = cooldownLeft > 0;
+
+  return (
+    <div className="mm-editor">
+      <div className="mm-editor__win mm-win">
+        <div className="mm-win__titlebar">
+          <div className="mm-win__ctrl-btn" onPointerDown={onBack}>X</div>
+          <div className="mm-win__hatch" />
+          <div className="mm-win__title">{t(style.nameKey)}</div>
+        </div>
+
+        <div className="mm-win__body mm-editor__body">
+          {/* Character badge */}
+          <div className="mm-editor__char">
+            <img src={character.avatar} alt={character.name} draggable={false} />
+            <span>{character.name}</span>
+          </div>
+
+          <div className="mm-editor__desc">{t(style.descKey)}</div>
+
+          <div className="mm-hatch-block" />
+
+          {/* Scene text inputs */}
+          <div className="mm-editor__field">
+            <label className="mm-editor__label">{'>'} {t('editor.scene1')}_</label>
+            <textarea
+              className="mm-editor__input"
+              value={scene1}
+              onChange={e => onScene1Change(e.target.value)}
+              placeholder={style.defaultScene1}
+              rows={3}
+            />
+          </div>
+
+          <div className="mm-editor__field">
+            <label className="mm-editor__label">{'>'} {t('editor.scene2')}_</label>
+            <textarea
+              className="mm-editor__input"
+              value={scene2}
+              onChange={e => onScene2Change(e.target.value)}
+              placeholder={style.defaultScene2}
+              rows={3}
+            />
+          </div>
+
+          {/* Generate button with cooldown */}
+          <button
+            className={`mm-btn mm-editor__generate ${onCooldown ? 'mm-editor__generate--disabled' : ''}`}
+            onPointerDown={() => !onCooldown && onGenerate()}
+          >
+            {onCooldown ? `${t('editor.wait')} ${cooldownLeft}s` : '\u26A1 ' + t('editor.generate')}
+          </button>
+        </div>
+
+        <div className="mm-win__statusbar">
+          <span>C:\MEME\EDIT</span>
+          <span>{onCooldown ? `COOLDOWN ${cooldownLeft}s` : 'READY'}</span>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -6,12 +6,13 @@ interface Props {
   character: Character;
   styles: MemeStyle[];
   cooldownLeft: number;
-  onGenerate: (style: MemeStyle) => void;
+  onEdit: (style: MemeStyle) => void;
+  onQuickGenerate: (style: MemeStyle) => void;
   onOpenCharSelect: () => void;
   logoSrc: string;
 }
 
-export default function HomeScreen({ character, styles, cooldownLeft, onGenerate, onOpenCharSelect, logoSrc }: Props) {
+export default function HomeScreen({ character, styles, cooldownLeft, onEdit, onQuickGenerate, onOpenCharSelect, logoSrc }: Props) {
   const onCooldown = cooldownLeft > 0;
   return (
     <div className="mm-home">
@@ -68,13 +69,19 @@ export default function HomeScreen({ character, styles, cooldownLeft, onGenerate
                   </div>
                 )}
                 <div className="mm-home__meme-bottom">
-                  <div className="mm-home__meme-text">
+                  <div className="mm-home__meme-text" onPointerDown={() => onEdit(style)}>
                     <div className="mm-home__meme-name">{t(style.nameKey)}</div>
                     <div className="mm-home__meme-desc">{t(style.descKey)}</div>
                   </div>
                   <button
+                    className="mm-home__meme-btn mm-home__meme-btn--edit"
+                    onPointerDown={() => onEdit(style)}
+                  >
+                    {'\u270E'}
+                  </button>
+                  <button
                     className={`mm-home__meme-btn ${onCooldown ? 'mm-home__meme-btn--disabled' : ''}`}
-                    onPointerDown={() => !onCooldown && onGenerate(style)}
+                    onPointerDown={() => !onCooldown && onQuickGenerate(style)}
                   >
                     {onCooldown ? `${cooldownLeft}s` : '\u26A1 生成'}
                   </button>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useMyMeme } from './hooks/useMyMeme';
 import SplashScreen from './components/SplashScreen';
 import HomeScreen from './components/HomeScreen';
+import MemeEditor from './components/MemeEditor';
 import GeneratingScreen from './components/GeneratingScreen';
 import MemeResult from './components/MemeResult';
 import CharacterSelect from './components/CharacterSelect';
@@ -21,9 +22,24 @@ export default function MyMeme() {
           character={state.character}
           styles={state.styles}
           cooldownLeft={state.cooldownLeft}
-          onGenerate={state.generateMeme}
+          onEdit={state.openEditor}
+          onQuickGenerate={state.generateMeme}
           onOpenCharSelect={state.openCharSelect}
           logoSrc={aigramSrc}
+        />
+      )}
+
+      {splashDone && state.phase === 'editor' && state.selectedStyle && (
+        <MemeEditor
+          style={state.selectedStyle}
+          character={state.character}
+          scene1={state.scene1}
+          scene2={state.scene2}
+          cooldownLeft={state.cooldownLeft}
+          onScene1Change={state.setScene1}
+          onScene2Change={state.setScene2}
+          onGenerate={() => state.generateMeme()}
+          onBack={state.goHome}
         />
       )}
 
@@ -41,6 +57,7 @@ export default function MyMeme() {
           imageUrl={state.resultImage}
           cooldownLeft={state.cooldownLeft}
           onRetry={() => state.generateMeme()}
+          onBack={state.goEditor}
           onHome={state.goHome}
           logoSrc={aigramSrc}
         />

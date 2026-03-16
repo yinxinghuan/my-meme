@@ -31,6 +31,8 @@ export function useMyMeme() {
   const [character, setCharacter] = useState<Character>(DEFAULT_CHARACTERS[0]);
   const [showCharSelect, setShowCharSelect] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState<MemeStyle | null>(null);
+  const [scene1, setScene1] = useState('');
+  const [scene2, setScene2] = useState('');
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,9 +58,21 @@ export function useMyMeme() {
   }, []);
 
   // ── Build prompt ────────────────────────────────────
-  const buildPrompt = useCallback((style: MemeStyle, char: Character) => {
+  const buildPrompt = useCallback((style: MemeStyle, char: Character, s1?: string, s2?: string) => {
     const charDesc = CHARACTER_PROMPTS[char.id] || char.name;
-    return style.promptTemplate.replace(/\{character\}/g, charDesc);
+    return style.promptTemplate
+      .replace(/\{character\}/g, charDesc)
+      .replace(/\{scene1\}/g, s1 || style.defaultScene1)
+      .replace(/\{scene2\}/g, s2 || style.defaultScene2);
+  }, []);
+
+  // ── Open editor ─────────────────────────────────────
+  const openEditor = useCallback((style: MemeStyle) => {
+    setSelectedStyle(style);
+    setScene1(style.defaultScene1);
+    setScene2(style.defaultScene2);
+    setError(null);
+    setPhase('editor');
   }, []);
 
   // ── Generate meme ───────────────────────────────────
@@ -72,7 +86,7 @@ export function useMyMeme() {
     setResultImage(null);
     setPhase('generating');
 
-    const prompt = buildPrompt(s, character);
+    const prompt = buildPrompt(s, character, scene1, scene2);
     console.log('[MyMeme] Prompt:', prompt);
 
     try {
@@ -114,8 +128,14 @@ export function useMyMeme() {
     abortRef.current?.abort();
     setPhase('home');
     setSelectedStyle(null);
+    setScene1('');
+    setScene2('');
     setResultImage(null);
     setError(null);
+  }, []);
+
+  const goEditor = useCallback(() => {
+    setPhase('editor');
   }, []);
 
   // ── Character selection ─────────────────────────────
@@ -133,12 +153,18 @@ export function useMyMeme() {
     showCharSelect,
     selectedStyle,
     styles: MEME_STYLES,
+    scene1,
+    scene2,
+    setScene1,
+    setScene2,
     resultImage,
     generating,
     error,
     cooldownLeft,
+    openEditor,
     generateMeme,
     goHome,
+    goEditor,
     openCharSelect,
     closeCharSelect,
     pickCharacter,

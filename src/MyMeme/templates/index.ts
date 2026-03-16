@@ -1,6 +1,5 @@
 import type { MemeStyle } from '../types';
 
-// Preview images (will regenerate in new style later)
 import prevOvertime from '../img/previews/overtime.png';
 import prevMeetingMute from '../img/previews/meeting_mute.png';
 import prevSalaryDay from '../img/previews/salary_day.png';
@@ -24,251 +23,230 @@ export const CHARACTER_PROMPTS: Record<string, string> = {
   isabel: 'woman with silver-grey wavy medium hair, olive skin, elegant earrings, black dress with pink floral pattern',
 };
 
-// Western illustration style — NOT manga/anime
-const STYLE = 'two-panel comic, bold clean illustration style, thick outlines, flat colors, ' +
-  'expressive faces, western comic book style, panel borders, ' +
-  'all text in English, no Chinese Japanese Korean characters, ';
+const S = 'two-panel comic, bold clean illustration style, thick outlines, flat colors, expressive faces, western comic book style, panel borders, all text in English, no Chinese Japanese Korean characters, ';
+
+// Helper to build prompt template with {scene1}/{scene2} placeholders
+const T = (scene1Prompt: string, scene2Prompt: string) =>
+  S + `left panel: {character} ${scene1Prompt}, right panel: {character} ${scene2Prompt}`;
 
 export const MEME_STYLES: MemeStyle[] = [
   // ── HOT / TRENDING ────────────────────────
   {
-    id: 'ai-replace-me',
-    nameKey: 'meme.aireplaceme.name', descKey: 'meme.aireplaceme.desc', category: 'tech',
-    promptTemplate: STYLE +
-      'left panel: {character} laughing smugly at newspaper headline AI WILL REPLACE JOBS, arms crossed, speech bubble "yeah right", ' +
-      'right panel: {character} jaw on floor watching robot sitting at their desk doing their job perfectly, sweat pouring, speech bubble "wait..."',
+    id: 'ai-replace-me', nameKey: 'meme.aireplaceme.name', descKey: 'meme.aireplaceme.desc', category: 'tech',
+    defaultScene1: 'laughing smugly at headline AI WILL REPLACE JOBS',
+    defaultScene2: 'jaw on floor watching robot doing their job perfectly',
+    promptTemplate: T('{scene1}, arms crossed, speech bubble yeah right', '{scene2}, sweat pouring, speech bubble wait...'),
   },
   {
-    id: 'ai-art',
-    nameKey: 'meme.aiart.name', descKey: 'meme.aiart.desc', category: 'tech',
-    promptTemplate: STYLE +
-      'left panel: {character} exhausted after 6 hours of hand-drawing, surrounded by art supplies and coffee cups, proudly holding artwork, "6 HOURS" text, ' +
-      'right panel: someone clicking one button on laptop, identical art appears instantly, {character} staring in disbelief, pencil snaps in hand, "5 SECONDS" text',
+    id: 'ai-art', nameKey: 'meme.aiart.name', descKey: 'meme.aiart.desc', category: 'tech',
+    defaultScene1: 'exhausted after 6 hours of hand-drawing, proudly holding artwork',
+    defaultScene2: 'watching someone generate identical art with AI in 5 seconds',
+    promptTemplate: T('{scene1}, surrounded by art supplies and coffee cups, text 6 HOURS', '{scene2}, pencil snaps in hand, text 5 SECONDS'),
   },
   {
-    id: 'chatgpt-homework',
-    nameKey: 'meme.chatgpthomework.name', descKey: 'meme.chatgpthomework.desc', category: 'tech',
-    promptTemplate: STYLE +
-      'left panel: {character} feet on desk, phone in hand, smugly dictating homework to AI chatbot, easy life, speech bubble "write my essay", ' +
-      'right panel: {character} sweating bullets as stern teacher holds paper saying "THIS IS CLEARLY AI WRITTEN", face turning ghost white',
+    id: 'chatgpt-homework', nameKey: 'meme.chatgpthomework.name', descKey: 'meme.chatgpthomework.desc', category: 'tech',
+    defaultScene1: 'feet on desk, smugly dictating homework to AI chatbot',
+    defaultScene2: 'sweating as stern teacher holds paper saying THIS IS AI WRITTEN',
+    promptTemplate: T('{scene1}, easy life, speech bubble write my essay', '{scene2}, face turning ghost white'),
   },
   {
-    id: 'short-video-trap',
-    nameKey: 'meme.shortvideotrap.name', descKey: 'meme.shortvideotrap.desc', category: 'daily',
-    promptTemplate: STYLE +
-      'left panel: {character} in bed holding phone, clock shows 10 PM, speech bubble "just one more video then sleep", confident face, ' +
-      'right panel: same {character} still scrolling with bloodshot zombie eyes glued to phone, clock shows 4 AM, room completely dark, drool',
+    id: 'short-video-trap', nameKey: 'meme.shortvideotrap.name', descKey: 'meme.shortvideotrap.desc', category: 'daily',
+    defaultScene1: 'in bed holding phone, speech bubble just one more video',
+    defaultScene2: 'still scrolling with bloodshot zombie eyes, clock shows 4 AM',
+    promptTemplate: T('{scene1}, clock shows 10 PM, confident face', '{scene2}, room completely dark, drool'),
   },
   {
-    id: 'rto-mandate',
-    nameKey: 'meme.rtomandate.name', descKey: 'meme.rtomandate.desc', category: 'work',
-    promptTemplate: STYLE +
-      'left panel: {character} in pajamas working from couch, cat sleeping on laptop, coffee in hand, angels singing, text "WFH PARADISE", ' +
-      'right panel: {character} reading email on phone "RETURN TO OFFICE EFFECTIVE IMMEDIATELY", pajamas falling off, dramatic lightning, scream to sky',
+    id: 'rto-mandate', nameKey: 'meme.rtomandate.name', descKey: 'meme.rtomandate.desc', category: 'work',
+    defaultScene1: 'in pajamas working from couch, cat on laptop, coffee',
+    defaultScene2: 'reading email RETURN TO OFFICE IMMEDIATELY, dramatic scream',
+    promptTemplate: T('{scene1}, angels singing, text WFH PARADISE', '{scene2}, pajamas falling off, lightning'),
   },
   {
-    id: 'subscription-trap',
-    nameKey: 'meme.subscriptiontrap.name', descKey: 'meme.subscriptiontrap.desc', category: 'daily',
-    promptTemplate: STYLE +
-      'left panel: {character} happily clicking FREE TRIAL button on screen, excited face, sparkles, speech bubble "no risk!", ' +
-      'right panel: {character} opening bank statement showing 47 subscriptions totaling $847/month, eyes popping out of skull, money flying away',
+    id: 'subscription-trap', nameKey: 'meme.subscriptiontrap.name', descKey: 'meme.subscriptiontrap.desc', category: 'daily',
+    defaultScene1: 'happily clicking FREE TRIAL button, excited, sparkles',
+    defaultScene2: 'opening bank statement showing 47 subscriptions totaling $847/month',
+    promptTemplate: T('{scene1}, speech bubble no risk!', '{scene2}, eyes popping out, money flying away'),
   },
   {
-    id: 'influencer-vs-real',
-    nameKey: 'meme.influencervsreal.name', descKey: 'meme.influencervsreal.desc', category: 'social',
-    promptTemplate: STYLE +
-      'left panel labeled INSTAGRAM: {character} in perfect pose, golden hour lighting, artisan latte, aesthetic cafe, gorgeous, filters, ' +
-      'right panel labeled REALITY: {character} with 50 failed selfies on floor, cold untouched coffee, annoyed waiter, mascara smudged, mess',
+    id: 'influencer-vs-real', nameKey: 'meme.influencervsreal.name', descKey: 'meme.influencervsreal.desc', category: 'social',
+    defaultScene1: 'perfect pose, golden hour lighting, artisan latte, aesthetic cafe',
+    defaultScene2: 'with 50 failed selfies on floor, cold coffee, mascara smudged',
+    promptTemplate: S + 'left panel labeled INSTAGRAM: {character} {scene1}, gorgeous, filters, right panel labeled REALITY: {character} {scene2}, annoyed waiter, mess',
   },
   {
-    id: 'gas-prices',
-    nameKey: 'meme.gasprices.name', descKey: 'meme.gasprices.desc', category: 'daily',
-    promptTemplate: STYLE +
-      'left panel: {character} confidently driving up to gas station, wallet ready, car fuel gauge on empty, "time to fill up", ' +
-      'right panel: {character} fainting at gas pump, price display shows absurd number, wallet literally crying cartoon tears, soul leaving body',
+    id: 'gas-prices', nameKey: 'meme.gasprices.name', descKey: 'meme.gasprices.desc', category: 'daily',
+    defaultScene1: 'confidently driving up to gas station, wallet ready',
+    defaultScene2: 'fainting at gas pump seeing absurd price, wallet crying',
+    promptTemplate: T('{scene1}, car fuel gauge on empty', '{scene2}, soul leaving body'),
   },
   {
-    id: 'crypto-roller',
-    nameKey: 'meme.cryptoroller.name', descKey: 'meme.cryptoroller.desc', category: 'daily',
-    promptTemplate: STYLE +
-      'left panel: {character} in sunglasses popping champagne, crypto chart going straight UP on screen, money raining, text "TO THE MOON", ' +
-      'right panel: 5 minutes later same {character} crying into hands, chart crashed straight DOWN in red, everything on fire, text "TO THE FLOOR"',
+    id: 'crypto-roller', nameKey: 'meme.cryptoroller.name', descKey: 'meme.cryptoroller.desc', category: 'daily',
+    defaultScene1: 'in sunglasses popping champagne, crypto chart going UP',
+    defaultScene2: '5 minutes later crying, chart crashed DOWN in red',
+    promptTemplate: T('{scene1}, money raining, text TO THE MOON', '{scene2}, everything on fire, text TO THE FLOOR'),
   },
   {
-    id: 'dating-app-expect',
-    nameKey: 'meme.datingapp.name', descKey: 'meme.datingapp.desc', category: 'social',
-    promptTemplate: STYLE +
-      'left panel labeled PROFILE PIC: {character} looking absolutely gorgeous, studio lighting, perfect angle, 10/10, model vibes, ' +
-      'right panel labeled VIDEO CALL: same {character} in terrible webcam lighting, messy room behind, bed head, totally different person, awkward wave',
+    id: 'dating-app-expect', nameKey: 'meme.datingapp.name', descKey: 'meme.datingapp.desc', category: 'social',
+    defaultScene1: 'looking gorgeous, studio lighting, perfect angle, model vibes',
+    defaultScene2: 'terrible webcam lighting, bed head, totally different person',
+    promptTemplate: S + 'left panel labeled PROFILE PIC: {character} {scene1}, 10/10, right panel labeled VIDEO CALL: {character} {scene2}, messy room, awkward wave',
   },
 
   // ── WORK ──────────────────────────────────
   {
-    id: 'overtime', nameKey: 'meme.overtime.name', descKey: 'meme.overtime.desc',
-    category: 'work', preview: prevOvertime,
-    promptTemplate: STYLE +
-      'left panel: {character} happily packing bag, clock showing 6:00 PM sharp, coat on, one foot out the door, freedom, ' +
-      'right panel: boss blocking doorway with evil grin, {character} frozen mid-step, color drains from face, speech bubble "got a minute?"',
+    id: 'overtime', nameKey: 'meme.overtime.name', descKey: 'meme.overtime.desc', category: 'work', preview: prevOvertime,
+    defaultScene1: 'happily packing bag, clock showing 6PM, one foot out the door',
+    defaultScene2: 'frozen mid-step as boss blocks doorway with evil grin',
+    promptTemplate: T('{scene1}, freedom', '{scene2}, color drains from face, speech bubble got a minute?'),
   },
   {
-    id: 'meeting-mute', nameKey: 'meme.meetingmute.name', descKey: 'meme.meetingmute.desc',
-    category: 'work', preview: prevMeetingMute,
-    promptTemplate: STYLE +
-      'left panel: {character} lounging on video call, ranting about how boring this meeting is, eye-rolling, middle finger at screen, ' +
-      'right panel: horrified face noticing the MUTE button is OFF, 40 coworker faces staring, mic icon glowing red, cold sweat waterfall',
+    id: 'meeting-mute', nameKey: 'meme.meetingmute.name', descKey: 'meme.meetingmute.desc', category: 'work', preview: prevMeetingMute,
+    defaultScene1: 'lounging on video call, ranting about boring meeting',
+    defaultScene2: 'horrified noticing the MUTE button is OFF, 40 coworkers staring',
+    promptTemplate: T('{scene1}, eye-rolling', '{scene2}, mic icon glowing red, cold sweat waterfall'),
   },
   {
-    id: 'salary-day', nameKey: 'meme.salaryday.name', descKey: 'meme.salaryday.desc',
-    category: 'work', preview: prevSalaryDay,
-    promptTemplate: STYLE +
-      'left panel: {character} checking phone notification SALARY RECEIVED, jumping for joy, money signs in eyes, raining cash, ' +
-      'right panel: same {character} after paying rent + bills + subscriptions, bank shows $3.47, eating instant noodles, dead inside',
+    id: 'salary-day', nameKey: 'meme.salaryday.name', descKey: 'meme.salaryday.desc', category: 'work', preview: prevSalaryDay,
+    defaultScene1: 'checking phone SALARY RECEIVED, jumping for joy, money eyes',
+    defaultScene2: 'after paying rent and bills, bank shows $3.47, eating noodles',
+    promptTemplate: T('{scene1}, raining cash', '{scene2}, dead inside'),
   },
   {
     id: 'email-typo', nameKey: 'meme.emailtypo.name', descKey: 'meme.emailtypo.desc', category: 'work',
-    promptTemplate: STYLE +
-      'left panel: {character} triumphantly pressing SEND on important email to CEO, confident smile, dusting hands off, job well done, ' +
-      'right panel: {character} spotting horrific typo 0.5 seconds after send, reaching through screen trying to grab email back, face melting in horror',
+    defaultScene1: 'triumphantly pressing SEND on important email to CEO',
+    defaultScene2: 'spotting horrific typo 0.5 seconds after send',
+    promptTemplate: T('{scene1}, confident smile, job well done', '{scene2}, reaching through screen, face melting in horror'),
   },
   {
     id: 'fake-busy', nameKey: 'meme.fakebusy.name', descKey: 'meme.fakebusy.desc', category: 'work',
-    promptTemplate: STYLE +
-      'left panel: boss walking past, {character} typing furiously with serious concentrated face, spreadsheet on screen, employee of the month vibes, ' +
-      'right panel: zoomed in on {character} screen actually showing online shopping cart with 47 items, sneaky guilty grin',
+    defaultScene1: 'typing furiously with serious face as boss walks past',
+    defaultScene2: 'screen actually showing online shopping cart with 47 items',
+    promptTemplate: T('{scene1}, spreadsheet on screen, employee of the month vibes', '{scene2}, sneaky guilty grin'),
   },
   {
     id: 'reply-all', nameKey: 'meme.replyall.name', descKey: 'meme.replyall.desc', category: 'work',
-    promptTemplate: STYLE +
-      'left panel: {character} smirking while typing sarcastic roast reply about annoying coworker, feeling clever, evil grin, ' +
-      'right panel: {character} realizing they pressed REPLY ALL to entire company 500 people, face turning to skeleton, soul leaving body upward',
+    defaultScene1: 'smirking while typing sarcastic roast about annoying coworker',
+    defaultScene2: 'realizing they pressed REPLY ALL to 500 people',
+    promptTemplate: T('{scene1}, feeling clever, evil grin', '{scene2}, face turning to skeleton, soul leaving body'),
   },
 
   // ── DAILY LIFE ────────────────────────────
   {
-    id: 'monday-friday', nameKey: 'meme.mondayfriday.name', descKey: 'meme.mondayfriday.desc',
-    category: 'daily', preview: prevMondayFriday,
-    promptTemplate: STYLE +
-      'left panel labeled MONDAY: {character} as zombie, dark eye bags to the floor, dragging body through office door, grey depressing, coffee IV drip, ' +
-      'right panel labeled FRIDAY: same {character} in party mode, sunglasses, dancing on desk, confetti cannon, disco ball, maximum energy',
+    id: 'monday-friday', nameKey: 'meme.mondayfriday.name', descKey: 'meme.mondayfriday.desc', category: 'daily', preview: prevMondayFriday,
+    defaultScene1: 'as zombie, dark eye bags, dragging body through office door',
+    defaultScene2: 'in party mode, sunglasses, dancing on desk, confetti',
+    promptTemplate: S + 'left panel labeled MONDAY: {character} {scene1}, grey depressing, coffee IV drip, right panel labeled FRIDAY: {character} {scene2}, disco ball, maximum energy',
   },
   {
-    id: 'wifi-down', nameKey: 'meme.wifidown.name', descKey: 'meme.wifidown.desc',
-    category: 'daily', preview: prevWifiDown,
-    promptTemplate: STYLE +
-      'left panel: {character} peacefully scrolling phone on couch, wifi bars full, serene paradise, birds singing, ' +
-      'right panel: wifi icon shows X, {character} screaming like world is ending, dramatic, flipping furniture, apocalyptic chaos',
+    id: 'wifi-down', nameKey: 'meme.wifidown.name', descKey: 'meme.wifidown.desc', category: 'daily', preview: prevWifiDown,
+    defaultScene1: 'peacefully scrolling phone on couch, wifi bars full',
+    defaultScene2: 'screaming like world is ending, flipping furniture',
+    promptTemplate: T('{scene1}, serene paradise, birds singing', '{scene2}, wifi icon X, apocalyptic chaos'),
   },
   {
-    id: 'alarm-snooze', nameKey: 'meme.alarmsnooze.name', descKey: 'meme.alarmsnooze.desc',
-    category: 'daily', preview: prevAlarmSnooze,
-    promptTemplate: STYLE +
-      'left panel: {character} in bed at night, fist raised with determination, speech bubble "WAKING UP AT 6AM TOMORROW!", heroic aura, ' +
-      'right panel: same {character} at 6AM violently smashing alarm clock to pieces with sledgehammer, "5 MORE MINUTES" speech bubble, rage face',
+    id: 'alarm-snooze', nameKey: 'meme.alarmsnooze.name', descKey: 'meme.alarmsnooze.desc', category: 'daily', preview: prevAlarmSnooze,
+    defaultScene1: 'in bed at night, fist raised, speech bubble WAKING UP AT 6AM',
+    defaultScene2: 'at 6AM violently smashing alarm clock, 5 MORE MINUTES',
+    promptTemplate: T('{scene1}, heroic aura', '{scene2}, rage face, sledgehammer'),
   },
   {
-    id: 'diet', nameKey: 'meme.diet.name', descKey: 'meme.diet.desc',
-    category: 'daily', preview: prevDiet,
-    promptTemplate: STYLE +
-      'left panel: {character} in workout gear holding sad tiny salad, halo above head, text "DIET DAY 1", virtuous glow, ' +
-      'right panel: same night, {character} surrounded by pizza boxes, ice cream, chips, chocolate, guilty face smeared with sauce, text "DIET DAY 1 NIGHT"',
+    id: 'diet', nameKey: 'meme.diet.name', descKey: 'meme.diet.desc', category: 'daily', preview: prevDiet,
+    defaultScene1: 'in workout gear holding tiny salad, halo above head',
+    defaultScene2: 'surrounded by pizza, ice cream, chips, guilty face',
+    promptTemplate: T('{scene1}, text DIET DAY 1, virtuous glow', '{scene2}, text DIET DAY 1 NIGHT, sauce smeared'),
   },
   {
     id: 'bed-phone', nameKey: 'meme.bedphone.name', descKey: 'meme.bedphone.desc', category: 'daily',
-    promptTemplate: STYLE +
-      'left panel: {character} tucked in bed, yawning, clock shows 11 PM, speech bubble "goodnight!", lights dimming, cozy, ' +
-      'right panel: same {character} wide awake, phone glow illuminating face in pitch dark room, clock shows 3:47 AM, zombie eyes, scroll scroll scroll',
+    defaultScene1: 'tucked in bed yawning, speech bubble goodnight!',
+    defaultScene2: 'wide awake, phone glow in pitch dark, clock 3:47 AM',
+    promptTemplate: T('{scene1}, clock shows 11 PM, cozy', '{scene2}, zombie eyes, scroll scroll scroll'),
   },
   {
     id: 'cooking-fail', nameKey: 'meme.cookingfail.name', descKey: 'meme.cookingfail.desc', category: 'daily',
-    promptTemplate: STYLE +
-      'left panel: {character} in chef hat watching cooking tutorial on phone, ingredients neatly prepared, confident thumbs up, "easy!", ' +
-      'right panel: kitchen completely destroyed, smoke alarm going off, {character} covered in flour, pan on fire, burnt black mess, 911 dialing',
+    defaultScene1: 'in chef hat watching cooking tutorial, ingredients ready',
+    defaultScene2: 'kitchen destroyed, smoke alarm, pan on fire, covered in flour',
+    promptTemplate: T('{scene1}, confident thumbs up, text easy!', '{scene2}, burnt black mess, 911 dialing'),
   },
   {
     id: 'online-vs-reality', nameKey: 'meme.onlinevsreal.name', descKey: 'meme.onlinevsreal.desc', category: 'daily',
-    promptTemplate: STYLE +
-      'left panel labeled ONLINE ORDER: beautiful perfect gourmet burger, studio lighting, magazine worthy, dripping with goodness, ' +
-      'right panel labeled WHAT ARRIVED: {character} holding sad flat squished pathetic burger, completely different, disappointed face, side-by-side comparison',
+    defaultScene1: 'beautiful perfect gourmet burger, studio lighting',
+    defaultScene2: 'holding sad flat squished pathetic burger, disappointed',
+    promptTemplate: S + 'left panel labeled ONLINE ORDER: {scene1}, magazine worthy, right panel labeled WHAT ARRIVED: {character} {scene2}, completely different, side-by-side comparison',
   },
   {
     id: 'fridge-stare', nameKey: 'meme.fridgestare.name', descKey: 'meme.fridgestare.desc', category: 'daily',
-    promptTemplate: STYLE +
-      'left panel: {character} opening fridge door with hope and excitement, stomach growling, speech bubble "what do we have!", ' +
-      'right panel: inside fridge is completely empty except one old condiment bottle, tumbleweed rolls past, {character} existential void stare',
+    defaultScene1: 'opening fridge door with hope, stomach growling',
+    defaultScene2: 'staring into completely empty fridge, existential void',
+    promptTemplate: T('{scene1}, speech bubble what do we have!', '{scene2}, one old condiment bottle, tumbleweed rolls past'),
   },
 
   // ── SOCIAL ────────────────────────────────
   {
-    id: 'read-no-reply', nameKey: 'meme.readnoreply.name', descKey: 'meme.readnoreply.desc',
-    category: 'social', preview: prevReadNoReply,
-    promptTemplate: STYLE +
-      'left panel: {character} staring at phone anxiously, refreshing conversation, biting nails, speech bubble "please reply please reply", ' +
-      'right panel: message shows "Read 3:42 PM" with no reply, {character} soul literally floating out of body upward, devastation, betrayal',
+    id: 'read-no-reply', nameKey: 'meme.readnoreply.name', descKey: 'meme.readnoreply.desc', category: 'social', preview: prevReadNoReply,
+    defaultScene1: 'staring at phone anxiously, biting nails, please reply',
+    defaultScene2: 'seeing Read 3:42 PM with no reply, soul leaving body',
+    promptTemplate: T('{scene1}, refreshing conversation', '{scene2}, devastation, betrayal'),
   },
   {
-    id: 'introvert-party', nameKey: 'meme.introvertparty.name', descKey: 'meme.introvertparty.desc',
-    category: 'social', preview: prevIntrovertParty,
-    promptTemplate: STYLE +
-      'left panel: {character} at crowded loud party, forced awkward smile, surrounded by strangers, thought bubble "help me", sweating, ' +
-      'right panel: {character} at home in blanket burrito with snacks and phone, pure euphoria face, heavenly light, text "HOME SWEET HOME"',
+    id: 'introvert-party', nameKey: 'meme.introvertparty.name', descKey: 'meme.introvertparty.desc', category: 'social', preview: prevIntrovertParty,
+    defaultScene1: 'at crowded party, forced awkward smile, thought bubble help me',
+    defaultScene2: 'at home in blanket burrito with snacks, pure euphoria',
+    promptTemplate: T('{scene1}, surrounded by strangers, sweating', '{scene2}, heavenly light, text HOME SWEET HOME'),
   },
   {
-    id: 'group-photo', nameKey: 'meme.groupphoto.name', descKey: 'meme.groupphoto.desc',
-    category: 'social', preview: prevGroupPhoto,
-    promptTemplate: STYLE +
-      'left panel: {character} striking confident cool pose for group photo, thought bubble "I look amazing", duck face, peace sign, ' +
-      'right panel: the actual photo result, {character} looking absolutely terrible, eyes half closed, mouth weird, everyone else looks great',
+    id: 'group-photo', nameKey: 'meme.groupphoto.name', descKey: 'meme.groupphoto.desc', category: 'social', preview: prevGroupPhoto,
+    defaultScene1: 'striking confident cool pose, thought bubble I look amazing',
+    defaultScene2: 'the actual photo: looking terrible, eyes half closed',
+    promptTemplate: T('{scene1}, duck face, peace sign', '{scene2}, mouth weird, everyone else looks great'),
   },
   {
     id: 'typing-delete', nameKey: 'meme.typingdelete.name', descKey: 'meme.typingdelete.desc', category: 'social',
-    promptTemplate: STYLE +
-      'left panel: {character} typing passionate 500-word love confession message, intense focused face, phone screen full of text, heart pounding, ' +
-      'right panel: {character} deleting everything and just sending "ok", coward face, trash can overflowing with drafted messages, sigh',
+    defaultScene1: 'typing passionate 500-word message, intense focused face',
+    defaultScene2: 'deleting everything and just sending ok, coward face',
+    promptTemplate: T('{scene1}, phone screen full of text, heart pounding', '{scene2}, trash can overflowing with drafts, sigh'),
   },
   {
     id: 'plans-cancelled', nameKey: 'meme.planscancelled.name', descKey: 'meme.planscancelled.desc', category: 'social',
-    promptTemplate: STYLE +
-      'left panel: {character} receiving "sorry can\'t make it" text, fake sad face, hand on heart, speech bubble "oh noooo what a shame", acting, ' +
-      'right panel: {character} instantly in pajamas doing victory dance, pizza ordered, Netflix on, pure evil joy, text "FREEDOM"',
+    defaultScene1: 'receiving sorry cant make it text, fake sad face',
+    defaultScene2: 'instantly in pajamas doing victory dance, pizza ordered',
+    promptTemplate: T('{scene1}, hand on heart, speech bubble oh noooo, acting', '{scene2}, Netflix on, pure evil joy, text FREEDOM'),
   },
 
   // ── TECH ──────────────────────────────────
   {
-    id: 'one-more-bug', nameKey: 'meme.onemorebug.name', descKey: 'meme.onemorebug.desc',
-    category: 'tech', preview: prevOneMoreBug,
-    promptTemplate: STYLE +
-      'left panel: {character} victory pose at computer, confetti, text "BUG FIXED!", champagne, celebration, fist pump, one bug crossed out, ' +
-      'right panel: computer screen showing 99 NEW BUGS in red, {character} face melting in horror, code on fire, everything is on fire',
+    id: 'one-more-bug', nameKey: 'meme.onemorebug.name', descKey: 'meme.onemorebug.desc', category: 'tech', preview: prevOneMoreBug,
+    defaultScene1: 'victory pose at computer, text BUG FIXED!, champagne',
+    defaultScene2: 'screen showing 99 NEW BUGS in red, face melting',
+    promptTemplate: T('{scene1}, confetti, fist pump', '{scene2}, code on fire, everything on fire'),
   },
   {
-    id: 'stackoverflow', nameKey: 'meme.stackoverflow.name', descKey: 'meme.stackoverflow.desc',
-    category: 'tech', preview: prevStackoverflow,
-    promptTemplate: STYLE +
-      'left panel: {character} typing with blazing speed, cool hacker sunglasses, green code reflected in glasses, speech bubble "10x developer", elite aura, ' +
-      'right panel: {character} nervously copy-pasting from StackOverflow with CTRL+C, looking over shoulder, guilty sweating, tab shows stackoverflow.com',
+    id: 'stackoverflow', nameKey: 'meme.stackoverflow.name', descKey: 'meme.stackoverflow.desc', category: 'tech', preview: prevStackoverflow,
+    defaultScene1: 'typing with blazing speed, cool hacker sunglasses, elite aura',
+    defaultScene2: 'nervously copy-pasting from StackOverflow, guilty sweating',
+    promptTemplate: T('{scene1}, green code reflected in glasses, 10x developer', '{scene2}, looking over shoulder, tab shows stackoverflow.com'),
   },
   {
     id: 'git-force-push', nameKey: 'meme.gitforcepush.name', descKey: 'meme.gitforcepush.desc', category: 'tech',
-    promptTemplate: STYLE +
-      'left panel: {character} casually pressing enter on "git push --force", relaxed, no big deal, coffee in hand, speech bubble "it\'s fine", ' +
-      'right panel: entire team running around office in panic, servers exploding, code on fire, {character} slowly backing toward exit door',
+    defaultScene1: 'casually pressing enter on git push --force, relaxed',
+    defaultScene2: 'entire team in panic, servers exploding, code on fire',
+    promptTemplate: T('{scene1}, coffee in hand, speech bubble its fine', '{scene2}, slowly backing toward exit door'),
   },
   {
     id: 'works-on-my-machine', nameKey: 'meme.worksonmymachine.name', descKey: 'meme.worksonmymachine.desc', category: 'tech',
-    promptTemplate: STYLE +
-      'left panel: {character} shrugging at laptop showing green checkmarks, smug face, speech bubble "WORKS ON MY MACHINE", confident, ' +
-      'right panel: production server room literally on fire, explosions, ERROR 500 everywhere, {character} in background tiptoeing away whistling',
+    defaultScene1: 'shrugging at laptop showing green checkmarks, smug face',
+    defaultScene2: 'production server room on fire, ERROR 500 everywhere',
+    promptTemplate: T('{scene1}, speech bubble WORKS ON MY MACHINE', '{scene2}, tiptoeing away whistling'),
   },
   {
     id: 'dark-mode', nameKey: 'meme.darkmode.name', descKey: 'meme.darkmode.desc', category: 'tech',
-    promptTemplate: STYLE +
-      'left panel: {character} coding in dark room, dark mode terminal, green text, cool hacker aesthetic, comfortable, night owl vibes, ' +
-      'right panel: accidentally opening white background website, blinding white nuclear explosion of light from screen, {character} eyes burning melting, dramatic',
+    defaultScene1: 'coding in dark room, dark mode terminal, green text, night owl',
+    defaultScene2: 'accidentally opening white background website, blinding light',
+    promptTemplate: T('{scene1}, cool hacker aesthetic', '{scene2}, nuclear explosion of light from screen, eyes burning'),
   },
   {
     id: 'no-comments', nameKey: 'meme.nocomments.name', descKey: 'meme.nocomments.desc', category: 'tech',
-    promptTemplate: STYLE +
-      'left panel: {character} proudly refusing to write code comments, speech bubble "my code is self-documenting", nose in air, superior, ' +
-      'right panel: 3 MONTHS LATER same {character} staring at own code with zero comprehension, confused, head scratching, speech bubble "who wrote this garbage"',
+    defaultScene1: 'proudly refusing to write code comments, nose in air',
+    defaultScene2: '3 months later staring at own code with zero comprehension',
+    promptTemplate: T('{scene1}, speech bubble my code is self-documenting', '{scene2}, speech bubble who wrote this garbage'),
   },
 ];

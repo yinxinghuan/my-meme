@@ -6,11 +6,12 @@ interface Props {
   imageUrl: string;
   cooldownLeft: number;
   onRetry: () => void;
+  onBack: () => void;
   onHome: () => void;
   logoSrc: string;
 }
 
-export default function MemeResult({ imageUrl, cooldownLeft, onRetry, onHome, logoSrc }: Props) {
+export default function MemeResult({ imageUrl, cooldownLeft, onRetry, onBack, onHome, logoSrc }: Props) {
   const onCooldown = cooldownLeft > 0;
   const [saved, setSaved] = useState(false);
 
@@ -63,6 +64,9 @@ export default function MemeResult({ imageUrl, cooldownLeft, onRetry, onHome, lo
                 onPointerDown={() => !onCooldown && onRetry()}
               >
                 {onCooldown ? `${cooldownLeft}s` : `\u21BB ${t('result.retry')}`}
+              </button>
+              <button className="mm-result__nav-btn" onPointerDown={onBack}>
+                {'\u270E'} Edit
               </button>
               <button className="mm-result__nav-btn" onPointerDown={onHome}>
                 {'\u25C0'} Home
