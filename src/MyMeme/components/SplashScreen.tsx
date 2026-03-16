@@ -1,5 +1,6 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import posterSrc from '../img/poster.png';
+import { playStartup } from '../utils/sounds';
 
 // Preload all avatar images
 import avatarCrisvelita from '../img/avatars/crisvelita.png';
@@ -30,8 +31,9 @@ const SplashScreen = React.memo(
     const [minDone, setMinDone] = useState(false);
     const [assetsDone, setAssetsDone] = useState(false);
 
-    // Gate 1: min display time
+    // Gate 1: min display time + startup sound
     useEffect(() => {
+      playStartup();
       const t = setTimeout(() => setMinDone(true), MIN_MS);
       return () => clearTimeout(t);
     }, []);

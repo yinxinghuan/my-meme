@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import type { AppPhase, Character, MemeStyle } from '../types';
 import { MEME_STYLES, CHARACTER_PROMPTS } from '../templates';
+import { playClick, playGenerating, playSuccess, playError, playSelect } from '../utils/sounds';
 
 import avatarCrisvelita from '../img/avatars/crisvelita.png';
 import avatarAlgram from '../img/avatars/algram.png';
@@ -68,6 +69,7 @@ export function useMyMeme() {
 
   // ── Open editor ─────────────────────────────────────
   const openEditor = useCallback((style: MemeStyle) => {
+    playClick();
     setSelectedStyle(style);
     setScene1(style.defaultScene1);
     setScene2(style.defaultScene2);
@@ -80,6 +82,7 @@ export function useMyMeme() {
     const s = style || selectedStyle;
     if (!s) return;
 
+    playGenerating();
     setSelectedStyle(s);
     setGenerating(true);
     setError(null);
@@ -104,6 +107,7 @@ export function useMyMeme() {
       const data = await resp.json();
       console.log('[MyMeme] Response:', data);
       if (data.code === 200 && data.url) {
+        playSuccess();
         setResultImage(data.url);
         setPhase('result');
         startCooldown();
@@ -115,6 +119,7 @@ export function useMyMeme() {
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return;
       const msg = err instanceof Error ? err.message : 'Generation failed';
+      playError();
       console.error('[MyMeme] Error:', msg);
       setError(msg);
       setPhase('generating');
@@ -142,6 +147,7 @@ export function useMyMeme() {
   const openCharSelect = useCallback(() => setShowCharSelect(true), []);
   const closeCharSelect = useCallback(() => setShowCharSelect(false), []);
   const pickCharacter = useCallback((char: Character) => {
+    playSelect();
     setCharacter(char);
     setShowCharSelect(false);
   }, []);

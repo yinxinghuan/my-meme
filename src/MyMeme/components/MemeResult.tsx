@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { t } from '../i18n';
+import { playSave } from '../utils/sounds';
 import './MemeResult.less';
 
 interface Props {
@@ -18,6 +19,7 @@ export default function MemeResult({ imageUrl, cooldownLeft, onRetry, onBack, on
   const [saved, setSaved] = useState(false);
 
   const markSaved = useCallback(() => {
+    playSave();
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }, []);
