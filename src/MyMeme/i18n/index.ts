@@ -22,7 +22,9 @@ const MESSAGES: Record<string, Record<Locale, string>> = {
   'generating.tip': { zh: '大约需要 30-60 秒', en: '~30-60 seconds' },
 
   'result.save': { zh: '保存图片', en: 'SAVE IMAGE' },
+  'result.share': { zh: '分享 / 保存', en: 'SHARE / SAVE' },
   'result.saved': { zh: 'SAVED!', en: 'SAVED!' },
+  'result.longPressHint': { zh: '长按图片也可以保存', en: 'Long press image to save' },
   'result.title': { zh: 'OUTPUT_', en: 'OUTPUT_' },
   'result.retry': { zh: '换一张', en: 'RETRY' },
 
