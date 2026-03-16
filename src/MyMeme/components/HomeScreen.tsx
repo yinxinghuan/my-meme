@@ -71,13 +71,13 @@ export default function HomeScreen({ character, styles, cooldownLeft, onEdit, on
                     className="mm-home__meme-btn mm-home__meme-btn--edit"
                     onPointerDown={() => onEdit(style)}
                   >
-                    编辑
+                    {t('home.edit')}
                   </button>
                   <button
                     className={`mm-home__meme-btn ${onCooldown ? 'mm-home__meme-btn--disabled' : ''}`}
                     onPointerDown={() => !onCooldown && onQuickGenerate(style)}
                   >
-                    {onCooldown ? `${cooldownLeft}s` : '\u26A1 生成'}
+                    {onCooldown ? `${cooldownLeft}s` : '\u26A1 ' + t('home.generate')}
                   </button>
                 </div>
               </div>

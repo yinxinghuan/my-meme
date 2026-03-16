@@ -6,6 +6,8 @@ const MESSAGES: Record<string, Record<Locale, string>> = {
   'home.styles': { zh: 'MEME_', en: 'MEME_' },
   'home.character': { zh: 'CHARACTER_', en: 'CHARACTER_' },
   'home.switch': { zh: '[ SWITCH ]', en: '[ SWITCH ]' },
+  'home.edit': { zh: '编辑', en: 'Edit' },
+  'home.generate': { zh: '生成', en: 'GO' },
 
   'cat.work': { zh: '职场', en: 'WORK' },
   'cat.daily': { zh: '日常', en: 'DAILY' },
