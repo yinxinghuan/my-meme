@@ -26,11 +26,12 @@
     &::-webkit-scrollbar { display: none; }
   }
 
+  // ── Character badge ─────────────────────────
   &__char {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 
     img {
       width: 40px;
@@ -39,12 +40,12 @@
       object-fit: cover;
       pointer-events: none;
     }
+  }
 
-    span {
-      font-family: @sans;
-      font-weight: 700;
-      font-size: 15px;
-    }
+  &__char-name {
+    font-family: @sans;
+    font-weight: 700;
+    font-size: 15px;
   }
 
   &__desc {
@@ -52,17 +53,24 @@
     font-size: 11px;
     color: @ink-light;
     letter-spacing: 0.04em;
-    margin-bottom: 4px;
   }
 
-  &__field {
-    margin-bottom: 14px;
+  // ── Side-by-side panels ─────────────────────
+  &__panels {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  &__panel {
+    flex: 1;
+    min-width: 0;
   }
 
   &__label {
     display: block;
     font-family: @mono;
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 0.06em;
     color: @ink-light;
     text-transform: uppercase;
@@ -73,46 +81,29 @@
     display: block;
     width: 100%;
     font-family: @mono;
-    font-size: 14px;
+    font-size: 13px;
     color: @ink;
     background: #fff;
     border: @border;
-    padding: 10px 12px;
+    padding: 8px 10px;
     outline: none;
     border-radius: 0;
     -webkit-appearance: none;
-    resize: vertical;
-    min-height: 56px;
+    resize: none;
+    min-height: 100px;
     box-shadow: inset 2px 2px 0 0 rgba(0,0,0,0.06);
     line-height: 1.4;
 
-    &::placeholder { color: @ink-faint; }
+    &::placeholder { color: @ink-faint; font-size: 12px; }
     &:focus { box-shadow: inset 2px 2px 0 0 rgba(0,0,0,0.06), 0 0 0 2px @ink; }
   }
 
+  // ── Generate button (same as home ⚡ 生成) ──
   &__generate {
     width: 100%;
-    padding: 16px;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    min-height: 52px;
-    background: @ink;
-    color: #fff;
-    border: @border;
-    box-shadow: 3px 3px 0 0 @ink;
     margin-top: auto;
     margin-bottom: 16px;
-
-    &:active {
-      box-shadow: 0 0 0 0;
-      transform: translate(3px, 3px);
-    }
-
-    &--disabled {
-      background: @ink-faint;
-      box-shadow: none;
-      pointer-events: none;
-    }
+    min-height: 52px;
+    font-size: 16px;
   }
 }
