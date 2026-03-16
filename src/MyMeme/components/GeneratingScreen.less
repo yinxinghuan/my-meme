@@ -23,32 +23,15 @@
     gap: 16px;
   }
 
-  // ── Spinner ─────────────────────────────────
+  // ── Spinner (simple CSS) ─────────────────────
   &__spinner {
-    margin-bottom: 8px;
-  }
-
-  &__spinner-frame {
-    width: 48px;
-    height: 48px;
-    position: relative;
-  }
-
-  &__spinner-dot {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: @ink;
-    animation: mm-spinner-fade 1s infinite;
-
-    &:nth-child(1) { top: 0; left: 21px; }
-    &:nth-child(2) { top: 6px; left: 35px; }
-    &:nth-child(3) { top: 21px; left: 42px; }
-    &:nth-child(4) { top: 35px; left: 35px; }
-    &:nth-child(5) { top: 42px; left: 21px; }
-    &:nth-child(6) { top: 35px; left: 6px; }
-    &:nth-child(7) { top: 21px; left: 0; }
-    &:nth-child(8) { top: 6px; left: 6px; }
+    width: 40px;
+    height: 40px;
+    border: 3px solid @ink-faint;
+    border-top-color: @ink;
+    border-radius: 50%;
+    animation: mm-spin 0.8s linear infinite;
+    margin-bottom: 16px;
   }
 
   &__text {
@@ -127,9 +110,8 @@
   }
 }
 
-@keyframes mm-spinner-fade {
-  0%, 100% { opacity: 0.15; }
-  12% { opacity: 1; }
+@keyframes mm-spin {
+  to { transform: rotate(360deg); }
 }
 
 @keyframes mm-progress {

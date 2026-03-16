@@ -30,11 +30,7 @@ export default function GeneratingScreen({ error, generating, onRetry, onCancel 
             </>
           ) : (
             <>
-              <div className="mm-gen__spinner">
-                {[...Array(8)].map((_, i) => (
-                  <div key={i} className="mm-gen__spinner-dot" style={{ animationDelay: `${i * 0.12}s` }} />
-                ))}
-              </div>
+              <div className="mm-gen__spinner" />
               <div className="mm-gen__text">{t('generating.wait')}</div>
               <div className="mm-gen__tip">{t('generating.tip')}</div>
               {generating && (
