@@ -12,6 +12,21 @@ import prevGasPrices from '../img/previews/gas_prices.png';
 import prevCryptoRoller from '../img/previews/crypto_roller.png';
 import prevDatingApp from '../img/previews/dating_app.png';
 
+// Remaining previews
+import prevEmailTypo from '../img/previews/email_typo.png';
+import prevFakeBusy from '../img/previews/fake_busy.png';
+import prevReplyAll from '../img/previews/reply_all.png';
+import prevBedPhone from '../img/previews/bed_phone.png';
+import prevCookingFail from '../img/previews/cooking_fail.png';
+import prevOnlineVsReality from '../img/previews/online_vs_reality.png';
+import prevFridgeStare from '../img/previews/fridge_stare.png';
+import prevTypingDelete from '../img/previews/typing_delete.png';
+import prevPlansCancelled from '../img/previews/plans_cancelled.png';
+import prevGitForcePush from '../img/previews/git_force_push.png';
+import prevWorksOnMyMachine from '../img/previews/works_on_my_machine.png';
+import prevDarkMode from '../img/previews/dark_mode.png';
+import prevNoComments from '../img/previews/no_comments.png';
+
 // Original 12 previews
 import prevOvertime from '../img/previews/overtime.png';
 import prevMeetingMute from '../img/previews/meeting_mute.png';
@@ -125,19 +140,19 @@ export const MEME_STYLES: MemeStyle[] = [
     promptTemplate: T('{scene1}, raining cash', '{scene2}, dead inside'),
   },
   {
-    id: 'email-typo', nameKey: 'meme.emailtypo.name', descKey: 'meme.emailtypo.desc', category: 'work',
+    id: 'email-typo', preview: prevEmailTypo, nameKey: 'meme.emailtypo.name', descKey: 'meme.emailtypo.desc', category: 'work',
     defaultScene1: 'triumphantly pressing SEND on important email to CEO',
     defaultScene2: 'spotting horrific typo 0.5 seconds after send',
     promptTemplate: T('{scene1}, confident smile, job well done', '{scene2}, reaching through screen, face melting in horror'),
   },
   {
-    id: 'fake-busy', nameKey: 'meme.fakebusy.name', descKey: 'meme.fakebusy.desc', category: 'work',
+    id: 'fake-busy', preview: prevFakeBusy, nameKey: 'meme.fakebusy.name', descKey: 'meme.fakebusy.desc', category: 'work',
     defaultScene1: 'typing furiously with serious face as boss walks past',
     defaultScene2: 'screen actually showing online shopping cart with 47 items',
     promptTemplate: T('{scene1}, spreadsheet on screen, employee of the month vibes', '{scene2}, sneaky guilty grin'),
   },
   {
-    id: 'reply-all', nameKey: 'meme.replyall.name', descKey: 'meme.replyall.desc', category: 'work',
+    id: 'reply-all', preview: prevReplyAll, nameKey: 'meme.replyall.name', descKey: 'meme.replyall.desc', category: 'work',
     defaultScene1: 'smirking while typing sarcastic roast about annoying coworker',
     defaultScene2: 'realizing they pressed REPLY ALL to 500 people',
     promptTemplate: T('{scene1}, feeling clever, evil grin', '{scene2}, face turning to skeleton, soul leaving body'),
@@ -169,25 +184,25 @@ export const MEME_STYLES: MemeStyle[] = [
     promptTemplate: T('{scene1}, text DIET DAY 1, virtuous glow', '{scene2}, text DIET DAY 1 NIGHT, sauce smeared'),
   },
   {
-    id: 'bed-phone', nameKey: 'meme.bedphone.name', descKey: 'meme.bedphone.desc', category: 'daily',
+    id: 'bed-phone', preview: prevBedPhone, nameKey: 'meme.bedphone.name', descKey: 'meme.bedphone.desc', category: 'daily',
     defaultScene1: 'tucked in bed yawning, speech bubble goodnight!',
     defaultScene2: 'wide awake, phone glow in pitch dark, clock 3:47 AM',
     promptTemplate: T('{scene1}, clock shows 11 PM, cozy', '{scene2}, zombie eyes, scroll scroll scroll'),
   },
   {
-    id: 'cooking-fail', nameKey: 'meme.cookingfail.name', descKey: 'meme.cookingfail.desc', category: 'daily',
+    id: 'cooking-fail', preview: prevCookingFail, nameKey: 'meme.cookingfail.name', descKey: 'meme.cookingfail.desc', category: 'daily',
     defaultScene1: 'in chef hat watching cooking tutorial, ingredients ready',
     defaultScene2: 'kitchen destroyed, smoke alarm, pan on fire, covered in flour',
     promptTemplate: T('{scene1}, confident thumbs up, text easy!', '{scene2}, burnt black mess, 911 dialing'),
   },
   {
-    id: 'online-vs-reality', nameKey: 'meme.onlinevsreal.name', descKey: 'meme.onlinevsreal.desc', category: 'daily',
+    id: 'online-vs-reality', preview: prevOnlineVsReality, nameKey: 'meme.onlinevsreal.name', descKey: 'meme.onlinevsreal.desc', category: 'daily',
     defaultScene1: 'beautiful perfect gourmet burger, studio lighting',
     defaultScene2: 'holding sad flat squished pathetic burger, disappointed',
     promptTemplate: S + 'left panel labeled ONLINE ORDER: {scene1}, magazine worthy, right panel labeled WHAT ARRIVED: {character} {scene2}, completely different, side-by-side comparison',
   },
   {
-    id: 'fridge-stare', nameKey: 'meme.fridgestare.name', descKey: 'meme.fridgestare.desc', category: 'daily',
+    id: 'fridge-stare', preview: prevFridgeStare, nameKey: 'meme.fridgestare.name', descKey: 'meme.fridgestare.desc', category: 'daily',
     defaultScene1: 'opening fridge door with hope, stomach growling',
     defaultScene2: 'staring into completely empty fridge, existential void',
     promptTemplate: T('{scene1}, speech bubble what do we have!', '{scene2}, one old condiment bottle, tumbleweed rolls past'),
@@ -213,13 +228,13 @@ export const MEME_STYLES: MemeStyle[] = [
     promptTemplate: T('{scene1}, duck face, peace sign', '{scene2}, mouth weird, everyone else looks great'),
   },
   {
-    id: 'typing-delete', nameKey: 'meme.typingdelete.name', descKey: 'meme.typingdelete.desc', category: 'social',
+    id: 'typing-delete', preview: prevTypingDelete, nameKey: 'meme.typingdelete.name', descKey: 'meme.typingdelete.desc', category: 'social',
     defaultScene1: 'typing passionate 500-word message, intense focused face',
     defaultScene2: 'deleting everything and just sending ok, coward face',
     promptTemplate: T('{scene1}, phone screen full of text, heart pounding', '{scene2}, trash can overflowing with drafts, sigh'),
   },
   {
-    id: 'plans-cancelled', nameKey: 'meme.planscancelled.name', descKey: 'meme.planscancelled.desc', category: 'social',
+    id: 'plans-cancelled', preview: prevPlansCancelled, nameKey: 'meme.planscancelled.name', descKey: 'meme.planscancelled.desc', category: 'social',
     defaultScene1: 'receiving sorry cant make it text, fake sad face',
     defaultScene2: 'instantly in pajamas doing victory dance, pizza ordered',
     promptTemplate: T('{scene1}, hand on heart, speech bubble oh noooo, acting', '{scene2}, Netflix on, pure evil joy, text FREEDOM'),
@@ -239,25 +254,25 @@ export const MEME_STYLES: MemeStyle[] = [
     promptTemplate: T('{scene1}, green code reflected in glasses, 10x developer', '{scene2}, looking over shoulder, tab shows stackoverflow.com'),
   },
   {
-    id: 'git-force-push', nameKey: 'meme.gitforcepush.name', descKey: 'meme.gitforcepush.desc', category: 'tech',
+    id: 'git-force-push', preview: prevGitForcePush, nameKey: 'meme.gitforcepush.name', descKey: 'meme.gitforcepush.desc', category: 'tech',
     defaultScene1: 'casually pressing enter on git push --force, relaxed',
     defaultScene2: 'entire team in panic, servers exploding, code on fire',
     promptTemplate: T('{scene1}, coffee in hand, speech bubble its fine', '{scene2}, slowly backing toward exit door'),
   },
   {
-    id: 'works-on-my-machine', nameKey: 'meme.worksonmymachine.name', descKey: 'meme.worksonmymachine.desc', category: 'tech',
+    id: 'works-on-my-machine', preview: prevWorksOnMyMachine, nameKey: 'meme.worksonmymachine.name', descKey: 'meme.worksonmymachine.desc', category: 'tech',
     defaultScene1: 'shrugging at laptop showing green checkmarks, smug face',
     defaultScene2: 'production server room on fire, ERROR 500 everywhere',
     promptTemplate: T('{scene1}, speech bubble WORKS ON MY MACHINE', '{scene2}, tiptoeing away whistling'),
   },
   {
-    id: 'dark-mode', nameKey: 'meme.darkmode.name', descKey: 'meme.darkmode.desc', category: 'tech',
+    id: 'dark-mode', preview: prevDarkMode, nameKey: 'meme.darkmode.name', descKey: 'meme.darkmode.desc', category: 'tech',
     defaultScene1: 'coding in dark room, dark mode terminal, green text, night owl',
     defaultScene2: 'accidentally opening white background website, blinding light',
     promptTemplate: T('{scene1}, cool hacker aesthetic', '{scene2}, nuclear explosion of light from screen, eyes burning'),
   },
   {
-    id: 'no-comments', nameKey: 'meme.nocomments.name', descKey: 'meme.nocomments.desc', category: 'tech',
+    id: 'no-comments', preview: prevNoComments, nameKey: 'meme.nocomments.name', descKey: 'meme.nocomments.desc', category: 'tech',
     defaultScene1: 'proudly refusing to write code comments, nose in air',
     defaultScene2: '3 months later staring at own code with zero comprehension',
     promptTemplate: T('{scene1}, speech bubble my code is self-documenting', '{scene2}, speech bubble who wrote this garbage'),
