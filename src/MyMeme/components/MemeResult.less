@@ -40,7 +40,15 @@
     height: auto;
     border: @border;
     box-shadow: 3px 3px 0 0 @ink;
-    pointer-events: none;
+    // Allow long-press to save on mobile
+  }
+
+  &__hint {
+    font-family: @mono;
+    font-size: 10px;
+    color: @ink-faint;
+    text-align: center;
+    margin-bottom: 8px;
   }
 
   &__actions {
