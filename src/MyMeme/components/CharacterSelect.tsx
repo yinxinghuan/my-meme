@@ -15,7 +15,7 @@ export default function CharacterSelect({ characters, current, onPick, onClose }
       <div className="mm-charsel__overlay" onPointerDown={onClose} />
       <div className="mm-charsel__dialog mm-win">
         <div className="mm-win__titlebar">
-          <div className="mm-win__ctrl-btn" onPointerDown={onClose}>X</div>
+          <div className="mm-win__back-btn" onPointerDown={onClose}>{'\u2039'}</div>
           <div className="mm-win__hatch" />
           <div className="mm-win__title">{t('charSelect.title')}</div>
         </div>

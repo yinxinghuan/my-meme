@@ -18,7 +18,6 @@ export default function HomeScreen({ character, styles, cooldownLeft, onEdit, on
     <div className="mm-home">
       <div className="mm-home__win mm-win">
         <div className="mm-win__titlebar">
-          <div className="mm-win__ctrl-btn">X</div>
           <div className="mm-win__hatch" />
           <div className="mm-win__title">MY_MEME.exe</div>
         </div>
