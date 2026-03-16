@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { t } from '../i18n';
 import './MemeResult.less';
 
@@ -11,81 +11,68 @@ interface Props {
   logoSrc: string;
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const TG = ((window as any).Telegram?.WebApp) as any | undefined;
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 export default function MemeResult({ imageUrl, cooldownLeft, onRetry, onBack, onHome, logoSrc }: Props) {
   const onCooldown = cooldownLeft > 0;
   const [saved, setSaved] = useState(false);
-  const [blobUrl, setBlobUrl] = useState<string | null>(null);
-
-  // Pre-fetch image as blob
-  useEffect(() => {
-    let url: string | null = null;
-    fetch(imageUrl)
-      .then(r => r.blob())
-      .then(blob => {
-        url = URL.createObjectURL(blob);
-        setBlobUrl(url);
-      })
-      .catch(() => {});
-    return () => { if (url) URL.revokeObjectURL(url); };
-  }, [imageUrl]);
 
   const markSaved = useCallback(() => {
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }, []);
 
-  const handleSave = useCallback(async () => {
-    const fileName = `meme-${Date.now()}.png`;
+  const handleSave = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const TG = ((window as any)?.Telegram?.WebApp) as any;
 
-    // Strategy 1: Telegram WebApp downloadFile
-    if (TG?.downloadFile) {
+    // Telegram Mini App: open image URL in external browser
+    if (TG) {
       try {
-        TG.downloadFile({ url: imageUrl, file_name: fileName });
-        markSaved();
-        return;
-      } catch { /* fall through */ }
+        if (typeof TG.openLink === 'function') {
+          TG.openLink(imageUrl);
+          markSaved();
+          return;
+        }
+      } catch (e) {
+        console.warn('[Save] TG.openLink failed:', e);
+      }
     }
 
-    // Strategy 2: Telegram openLink (opens in external browser where save works)
-    if (TG?.openLink) {
-      try {
-        TG.openLink(imageUrl);
-        markSaved();
-        return;
-      } catch { /* fall through */ }
-    }
-
-    // Strategy 3: navigator.share with file
-    if (navigator.share) {
-      try {
-        const resp = await fetch(imageUrl);
-        const blob = await resp.blob();
-        const file = new File([blob], fileName, { type: 'image/png' });
-        await navigator.share({ files: [file] });
-        markSaved();
-        return;
-      } catch { /* user cancelled or not supported, fall through */ }
-    }
-
-    // Strategy 4: <a download> (desktop browsers)
-    if (blobUrl) {
-      const link = document.createElement('a');
-      link.download = fileName;
-      link.href = blobUrl;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      markSaved();
+    // Mobile: try navigator.share
+    if (isMobile && navigator.share) {
+      fetch(imageUrl)
+        .then(r => r.blob())
+        .then(blob => {
+          const file = new File([blob], `meme-${Date.now()}.png`, { type: 'image/png' });
+          return navigator.share({ files: [file] });
+        })
+        .then(() => markSaved())
+        .catch(() => {
+          // share failed/cancelled, open in new tab
+          window.open(imageUrl, '_blank');
+        });
       return;
     }
 
-    // Strategy 5: open in new tab
-    window.open(imageUrl, '_blank');
-  }, [imageUrl, blobUrl, markSaved]);
+    // Desktop: download via <a>
+    fetch(imageUrl)
+      .then(r => r.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `meme-${Date.now()}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        markSaved();
+      })
+      .catch(() => {
+        window.open(imageUrl, '_blank');
+      });
+  }, [imageUrl, markSaved]);
 
   return (
     <div className="mm-result">
@@ -97,13 +84,14 @@ export default function MemeResult({ imageUrl, cooldownLeft, onRetry, onBack, on
         </div>
 
         <div className="mm-win__body mm-result__body">
-          {/* Image — user-select enabled for long-press save */}
           <div className="mm-result__image-wrap">
-            <img
-              className="mm-result__image"
-              src={blobUrl || imageUrl}
-              alt="Generated meme"
-            />
+            <a href={imageUrl} target="_blank" rel="noopener noreferrer">
+              <img
+                className="mm-result__image"
+                src={imageUrl}
+                alt="Generated meme"
+              />
+            </a>
           </div>
 
           {isMobile && (
@@ -111,9 +99,10 @@ export default function MemeResult({ imageUrl, cooldownLeft, onRetry, onBack, on
           )}
 
           <div className="mm-result__actions">
+            {/* Use onClick for maximum WebView compatibility */}
             <button
               className={`mm-btn mm-result__save ${saved ? 'mm-result__save--saved' : ''}`}
-              onPointerDown={handleSave}
+              onClick={handleSave}
             >
               {saved ? t('result.saved') : t('result.save')}
             </button>
