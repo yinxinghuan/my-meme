@@ -42,9 +42,9 @@ export default function HomeScreen({ character, styles, onGenerate, onOpenCharSe
               </div>
               <div className="mm-home__char-info">
                 <div className="mm-home__char-name">{character.name}</div>
-                <div className="mm-home__char-meta">{'>'} TAP TO SWITCH</div>
-              <div className="mm-home__char-beta">{t('home.beta')}</div>
+                <div className="mm-home__char-beta">{t('home.beta')}</div>
               </div>
+              <div className="mm-home__char-arrow">{'\u25BC'}</div>
             </div>
           </div>
 
