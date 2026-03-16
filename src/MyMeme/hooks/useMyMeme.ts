@@ -22,7 +22,8 @@ const DEFAULT_CHARACTERS: Character[] = [
   { id: 'isabel', name: 'Isabel', avatar: avatarIsabel, refUrl: `${R2}/isabel.png` },
 ];
 
-const API_URL = 'http://aiservice.wdabuliu.com:8019/genl_image';
+// HTTPS proxy via Cloudflare Worker (works on both HTTP and HTTPS pages)
+const API_URL = 'https://meme-api-proxy.xinghuan-yin.workers.dev/';
 const USER_ID = 123456;
 
 export function useMyMeme() {
