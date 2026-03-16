@@ -1,5 +1,18 @@
 import type { MemeStyle } from '../types';
 
+// Trending previews
+import prevAiReplaceMe from '../img/previews/ai_replace_me.png';
+import prevAiArt from '../img/previews/ai_art.png';
+import prevChatgptHomework from '../img/previews/chatgpt_homework.png';
+import prevShortVideoTrap from '../img/previews/short_video_trap.png';
+import prevRtoMandate from '../img/previews/rto_mandate.png';
+import prevSubscriptionTrap from '../img/previews/subscription_trap.png';
+import prevInfluencerVsReal from '../img/previews/influencer_vs_real.png';
+import prevGasPrices from '../img/previews/gas_prices.png';
+import prevCryptoRoller from '../img/previews/crypto_roller.png';
+import prevDatingApp from '../img/previews/dating_app.png';
+
+// Original 12 previews
 import prevOvertime from '../img/previews/overtime.png';
 import prevMeetingMute from '../img/previews/meeting_mute.png';
 import prevSalaryDay from '../img/previews/salary_day.png';
@@ -32,61 +45,61 @@ const T = (scene1Prompt: string, scene2Prompt: string) =>
 export const MEME_STYLES: MemeStyle[] = [
   // ── HOT / TRENDING ────────────────────────
   {
-    id: 'ai-replace-me', nameKey: 'meme.aireplaceme.name', descKey: 'meme.aireplaceme.desc', category: 'tech',
+    id: 'ai-replace-me', nameKey: 'meme.aireplaceme.name', descKey: 'meme.aireplaceme.desc', category: 'tech', preview: prevAiReplaceMe,
     defaultScene1: 'laughing smugly at headline AI WILL REPLACE JOBS',
     defaultScene2: 'jaw on floor watching robot doing their job perfectly',
     promptTemplate: T('{scene1}, arms crossed, speech bubble yeah right', '{scene2}, sweat pouring, speech bubble wait...'),
   },
   {
-    id: 'ai-art', nameKey: 'meme.aiart.name', descKey: 'meme.aiart.desc', category: 'tech',
+    id: 'ai-art', nameKey: 'meme.aiart.name', descKey: 'meme.aiart.desc', category: 'tech', preview: prevAiArt,
     defaultScene1: 'exhausted after 6 hours of hand-drawing, proudly holding artwork',
     defaultScene2: 'watching someone generate identical art with AI in 5 seconds',
     promptTemplate: T('{scene1}, surrounded by art supplies and coffee cups, text 6 HOURS', '{scene2}, pencil snaps in hand, text 5 SECONDS'),
   },
   {
-    id: 'chatgpt-homework', nameKey: 'meme.chatgpthomework.name', descKey: 'meme.chatgpthomework.desc', category: 'tech',
+    id: 'chatgpt-homework', nameKey: 'meme.chatgpthomework.name', descKey: 'meme.chatgpthomework.desc', category: 'tech', preview: prevChatgptHomework,
     defaultScene1: 'feet on desk, smugly dictating homework to AI chatbot',
     defaultScene2: 'sweating as stern teacher holds paper saying THIS IS AI WRITTEN',
     promptTemplate: T('{scene1}, easy life, speech bubble write my essay', '{scene2}, face turning ghost white'),
   },
   {
-    id: 'short-video-trap', nameKey: 'meme.shortvideotrap.name', descKey: 'meme.shortvideotrap.desc', category: 'daily',
+    id: 'short-video-trap', nameKey: 'meme.shortvideotrap.name', descKey: 'meme.shortvideotrap.desc', category: 'daily', preview: prevShortVideoTrap,
     defaultScene1: 'in bed holding phone, speech bubble just one more video',
     defaultScene2: 'still scrolling with bloodshot zombie eyes, clock shows 4 AM',
     promptTemplate: T('{scene1}, clock shows 10 PM, confident face', '{scene2}, room completely dark, drool'),
   },
   {
-    id: 'rto-mandate', nameKey: 'meme.rtomandate.name', descKey: 'meme.rtomandate.desc', category: 'work',
+    id: 'rto-mandate', nameKey: 'meme.rtomandate.name', descKey: 'meme.rtomandate.desc', category: 'work', preview: prevRtoMandate,
     defaultScene1: 'in pajamas working from couch, cat on laptop, coffee',
     defaultScene2: 'reading email RETURN TO OFFICE IMMEDIATELY, dramatic scream',
     promptTemplate: T('{scene1}, angels singing, text WFH PARADISE', '{scene2}, pajamas falling off, lightning'),
   },
   {
-    id: 'subscription-trap', nameKey: 'meme.subscriptiontrap.name', descKey: 'meme.subscriptiontrap.desc', category: 'daily',
+    id: 'subscription-trap', nameKey: 'meme.subscriptiontrap.name', descKey: 'meme.subscriptiontrap.desc', category: 'daily', preview: prevSubscriptionTrap,
     defaultScene1: 'happily clicking FREE TRIAL button, excited, sparkles',
     defaultScene2: 'opening bank statement showing 47 subscriptions totaling $847/month',
     promptTemplate: T('{scene1}, speech bubble no risk!', '{scene2}, eyes popping out, money flying away'),
   },
   {
-    id: 'influencer-vs-real', nameKey: 'meme.influencervsreal.name', descKey: 'meme.influencervsreal.desc', category: 'social',
+    id: 'influencer-vs-real', nameKey: 'meme.influencervsreal.name', descKey: 'meme.influencervsreal.desc', category: 'social', preview: prevInfluencerVsReal,
     defaultScene1: 'perfect pose, golden hour lighting, artisan latte, aesthetic cafe',
     defaultScene2: 'with 50 failed selfies on floor, cold coffee, mascara smudged',
     promptTemplate: S + 'left panel labeled INSTAGRAM: {character} {scene1}, gorgeous, filters, right panel labeled REALITY: {character} {scene2}, annoyed waiter, mess',
   },
   {
-    id: 'gas-prices', nameKey: 'meme.gasprices.name', descKey: 'meme.gasprices.desc', category: 'daily',
+    id: 'gas-prices', nameKey: 'meme.gasprices.name', descKey: 'meme.gasprices.desc', category: 'daily', preview: prevGasPrices,
     defaultScene1: 'confidently driving up to gas station, wallet ready',
     defaultScene2: 'fainting at gas pump seeing absurd price, wallet crying',
     promptTemplate: T('{scene1}, car fuel gauge on empty', '{scene2}, soul leaving body'),
   },
   {
-    id: 'crypto-roller', nameKey: 'meme.cryptoroller.name', descKey: 'meme.cryptoroller.desc', category: 'daily',
+    id: 'crypto-roller', nameKey: 'meme.cryptoroller.name', descKey: 'meme.cryptoroller.desc', category: 'daily', preview: prevCryptoRoller,
     defaultScene1: 'in sunglasses popping champagne, crypto chart going UP',
     defaultScene2: '5 minutes later crying, chart crashed DOWN in red',
     promptTemplate: T('{scene1}, money raining, text TO THE MOON', '{scene2}, everything on fire, text TO THE FLOOR'),
   },
   {
-    id: 'dating-app-expect', nameKey: 'meme.datingapp.name', descKey: 'meme.datingapp.desc', category: 'social',
+    id: 'dating-app-expect', nameKey: 'meme.datingapp.name', descKey: 'meme.datingapp.desc', category: 'social', preview: prevDatingApp,
     defaultScene1: 'looking gorgeous, studio lighting, perfect angle, model vibes',
     defaultScene2: 'terrible webcam lighting, bed head, totally different person',
     promptTemplate: S + 'left panel labeled PROFILE PIC: {character} {scene1}, 10/10, right panel labeled VIDEO CALL: {character} {scene2}, messy room, awkward wave',
