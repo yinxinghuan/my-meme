@@ -94,12 +94,20 @@
     width: 100%;
     padding: 16px;
     font-size: 16px;
+    font-weight: 700;
     letter-spacing: 0.08em;
     min-height: 52px;
     background: @ink;
     color: #fff;
+    border: @border;
+    box-shadow: 3px 3px 0 0 @ink;
     margin-top: auto;
     margin-bottom: 16px;
+
+    &:active {
+      box-shadow: 0 0 0 0;
+      transform: translate(3px, 3px);
+    }
 
     &--disabled {
       background: @ink-faint;
