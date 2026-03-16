@@ -33,39 +33,41 @@ export default function MemeEditor({
           {/* Character badge */}
           <div className="mm-editor__char">
             <img src={character.avatar} alt={character.name} draggable={false} />
-            <span>{character.name}</span>
+            <div>
+              <div className="mm-editor__char-name">{character.name}</div>
+              <div className="mm-editor__desc">{t(style.descKey)}</div>
+            </div>
           </div>
-
-          <div className="mm-editor__desc">{t(style.descKey)}</div>
 
           <div className="mm-hatch-block" />
 
-          {/* Scene text inputs */}
-          <div className="mm-editor__field">
-            <label className="mm-editor__label">{'>'} {t('editor.scene1')}_</label>
-            <textarea
-              className="mm-editor__input"
-              value={scene1}
-              onChange={e => onScene1Change(e.target.value)}
-              placeholder={style.defaultScene1}
-              rows={3}
-            />
+          {/* Side-by-side scene inputs */}
+          <div className="mm-editor__panels">
+            <div className="mm-editor__panel">
+              <label className="mm-editor__label">{t('editor.scene1')}_</label>
+              <textarea
+                className="mm-editor__input"
+                value={scene1}
+                onChange={e => onScene1Change(e.target.value)}
+                placeholder={style.defaultScene1}
+                rows={4}
+              />
+            </div>
+            <div className="mm-editor__panel">
+              <label className="mm-editor__label">{t('editor.scene2')}_</label>
+              <textarea
+                className="mm-editor__input"
+                value={scene2}
+                onChange={e => onScene2Change(e.target.value)}
+                placeholder={style.defaultScene2}
+                rows={4}
+              />
+            </div>
           </div>
 
-          <div className="mm-editor__field">
-            <label className="mm-editor__label">{'>'} {t('editor.scene2')}_</label>
-            <textarea
-              className="mm-editor__input"
-              value={scene2}
-              onChange={e => onScene2Change(e.target.value)}
-              placeholder={style.defaultScene2}
-              rows={3}
-            />
-          </div>
-
-          {/* Generate button with cooldown */}
+          {/* Generate button */}
           <button
-            className={`mm-btn mm-editor__generate ${onCooldown ? 'mm-editor__generate--disabled' : ''}`}
+            className={`mm-home__meme-btn mm-editor__generate ${onCooldown ? 'mm-home__meme-btn--disabled' : ''}`}
             onPointerDown={() => !onCooldown && onGenerate()}
           >
             {onCooldown ? `${t('editor.wait')} ${cooldownLeft}s` : '\u26A1 ' + t('editor.generate')}
