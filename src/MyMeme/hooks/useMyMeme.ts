@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import type { AppPhase, Character, MemeStyle } from '../types';
 import { MEME_STYLES, CHARACTER_PROMPTS } from '../templates';
 
@@ -22,9 +22,9 @@ const DEFAULT_CHARACTERS: Character[] = [
   { id: 'isabel', name: 'Isabel', avatar: avatarIsabel, refUrl: `${R2}/isabel.png` },
 ];
 
-// HTTPS proxy via Cloudflare Worker (works on both HTTP and HTTPS pages)
 const API_URL = 'https://meme-api-proxy.xinghuan-yin.workers.dev/';
 const USER_ID = 123456;
+const COOLDOWN_MS = 75000; // 75 seconds
 
 export function useMyMeme() {
   const [phase, setPhase] = useState<AppPhase>('home');
@@ -36,13 +36,32 @@ export function useMyMeme() {
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
+  // ── Cooldown timer ──────────────────────────────────
+  const [cooldownLeft, setCooldownLeft] = useState(0); // seconds remaining
+  const lastGenRef = useRef(0);
+
+  useEffect(() => {
+    if (cooldownLeft <= 0) return;
+    const t = setInterval(() => {
+      const elapsed = Date.now() - lastGenRef.current;
+      const left = Math.ceil((COOLDOWN_MS - elapsed) / 1000);
+      setCooldownLeft(left > 0 ? left : 0);
+    }, 1000);
+    return () => clearInterval(t);
+  }, [cooldownLeft]);
+
+  const startCooldown = useCallback(() => {
+    lastGenRef.current = Date.now();
+    setCooldownLeft(Math.ceil(COOLDOWN_MS / 1000));
+  }, []);
+
   // ── Build prompt ────────────────────────────────────
   const buildPrompt = useCallback((style: MemeStyle, char: Character) => {
     const charDesc = CHARACTER_PROMPTS[char.id] || char.name;
     return style.promptTemplate.replace(/\{character\}/g, charDesc);
   }, []);
 
-  // ── Generate meme (one-tap) ─────────────────────────
+  // ── Generate meme ───────────────────────────────────
   const generateMeme = useCallback(async (style?: MemeStyle) => {
     const s = style || selectedStyle;
     if (!s) return;
@@ -73,6 +92,7 @@ export function useMyMeme() {
       if (data.code === 200 && data.url) {
         setResultImage(data.url);
         setPhase('result');
+        startCooldown();
       } else if (data.code === 429) {
         throw new Error('Too fast! Please wait ~60s and try again.');
       } else {
@@ -83,12 +103,11 @@ export function useMyMeme() {
       const msg = err instanceof Error ? err.message : 'Generation failed';
       console.error('[MyMeme] Error:', msg);
       setError(msg);
-      // Stay on generating screen so user can see error and retry
       setPhase('generating');
     } finally {
       setGenerating(false);
     }
-  }, [selectedStyle, character, buildPrompt]);
+  }, [selectedStyle, character, buildPrompt, startCooldown]);
 
   // ── Navigation ──────────────────────────────────────
   const goHome = useCallback(() => {
@@ -117,6 +136,7 @@ export function useMyMeme() {
     resultImage,
     generating,
     error,
+    cooldownLeft,
     generateMeme,
     goHome,
     openCharSelect,

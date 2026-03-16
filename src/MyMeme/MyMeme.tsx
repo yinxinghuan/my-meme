@@ -20,6 +20,7 @@ export default function MyMeme() {
         <HomeScreen
           character={state.character}
           styles={state.styles}
+          cooldownLeft={state.cooldownLeft}
           onGenerate={state.generateMeme}
           onOpenCharSelect={state.openCharSelect}
           logoSrc={aigramSrc}
@@ -38,6 +39,7 @@ export default function MyMeme() {
       {splashDone && state.phase === 'result' && state.resultImage && (
         <MemeResult
           imageUrl={state.resultImage}
+          cooldownLeft={state.cooldownLeft}
           onRetry={() => state.generateMeme()}
           onHome={state.goHome}
           logoSrc={aigramSrc}

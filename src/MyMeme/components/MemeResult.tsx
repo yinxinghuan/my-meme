@@ -4,12 +4,14 @@ import './MemeResult.less';
 
 interface Props {
   imageUrl: string;
+  cooldownLeft: number;
   onRetry: () => void;
   onHome: () => void;
   logoSrc: string;
 }
 
-export default function MemeResult({ imageUrl, onRetry, onHome, logoSrc }: Props) {
+export default function MemeResult({ imageUrl, cooldownLeft, onRetry, onHome, logoSrc }: Props) {
+  const onCooldown = cooldownLeft > 0;
   const [saved, setSaved] = useState(false);
 
   const handleSave = useCallback(async () => {
@@ -56,8 +58,11 @@ export default function MemeResult({ imageUrl, onRetry, onHome, logoSrc }: Props
               {saved ? t('result.saved') : t('result.save')}
             </button>
             <div className="mm-result__secondary">
-              <button className="mm-result__nav-btn" onPointerDown={onRetry}>
-                {'\u21BB'} {t('result.retry')}
+              <button
+                className={`mm-result__nav-btn ${onCooldown ? 'mm-result__nav-btn--disabled' : ''}`}
+                onPointerDown={() => !onCooldown && onRetry()}
+              >
+                {onCooldown ? `${cooldownLeft}s` : `\u21BB ${t('result.retry')}`}
               </button>
               <button className="mm-result__nav-btn" onPointerDown={onHome}>
                 {'\u25C0'} Home
