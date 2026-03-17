@@ -32,8 +32,23 @@
     min-height: 0;
     padding: 12px 14px;
     overflow-y: auto;
+    overflow-x: hidden;
 
-    &::-webkit-scrollbar { display: none; }
+    // Style scrollbar to match UI
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: @ink-light;
+      border: 1px solid @ink;
+
+      &:hover {
+        background: @ink;
+      }
+    }
   }
 
   &__prompt {
