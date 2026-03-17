@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import type { AppPhase, Character, MemeStyle } from '../types';
 import { MEME_STYLES, CHARACTER_PROMPTS } from '../templates';
 import { playClick, playGenerating, playSuccess, playError, playSelect } from '../utils/sounds';
+import { getApiOrigin, getTelegramId, getUserInfo, getContactsList, isApiAvailable } from '../utils/aigramApi';
 
 import avatarCrisvelita from '../img/avatars/crisvelita.png';
 import avatarAlgram from '../img/avatars/algram.png';
@@ -13,23 +14,37 @@ import avatarIsabel from '../img/avatars/isabel.png';
 
 const R2 = 'https://images.aiwaves.tech/mymeme/avatars';
 
+// Fallback default characters (used when API is not available)
 const DEFAULT_CHARACTERS: Character[] = [
   { id: 'crisvelita', name: 'Crisvelita', avatar: avatarCrisvelita, refUrl: `${R2}/crisvelita.png` },
   { id: 'algram', name: 'Algram', avatar: avatarAlgram, refUrl: `${R2}/algram.png` },
   { id: 'jenny', name: 'Jenny', avatar: avatarJenny, refUrl: `${R2}/jenny.png` },
-  { id: 'jmf', name: 'JM\u00B7F', avatar: avatarJmf, refUrl: `${R2}/jmf.png` },
+  { id: 'jmf', name: 'JM·F', avatar: avatarJmf, refUrl: `${R2}/jmf.png` },
   { id: 'ghostpixel', name: 'ghostpixel', avatar: avatarGhostpixel, refUrl: `${R2}/ghostpixel.png` },
   { id: 'isaya', name: 'Isaya', avatar: avatarIsaya, refUrl: `${R2}/isaya.png` },
   { id: 'isabel', name: 'Isabel', avatar: avatarIsabel, refUrl: `${R2}/isabel.png` },
 ];
 
 const API_URL = 'https://meme-api-proxy.xinghuan-yin.workers.dev/';
-const USER_ID = 123456;
 const COOLDOWN_MS = 75000; // 75 seconds
+
+/**
+ * Convert Telegram user to Character
+ * Uses user's avatar URL for both display and API reference
+ */
+function telegramUserToCharacter(user: any): Character {
+  return {
+    id: user.telegram_id,
+    name: user.name || 'User',
+    avatar: user.head_url || DEFAULT_CHARACTERS[0].avatar,
+    refUrl: user.head_url || DEFAULT_CHARACTERS[0].refUrl,
+  };
+}
 
 export function useMyMeme() {
   const [phase, setPhase] = useState<AppPhase>('home');
   const [character, setCharacter] = useState<Character>(DEFAULT_CHARACTERS[0]);
+  const [characters, setCharacters] = useState<Character[]>(DEFAULT_CHARACTERS);
   const [showCharSelect, setShowCharSelect] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState<MemeStyle | null>(null);
   const [scene1, setScene1] = useState('');
@@ -38,10 +53,57 @@ export function useMyMeme() {
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const [charsLoaded, setCharsLoaded] = useState(false);
 
   // ── Cooldown timer ──────────────────────────────────
   const [cooldownLeft, setCooldownLeft] = useState(0); // seconds remaining
   const lastGenRef = useRef(0);
+
+  // ── Load characters from API on mount ────────────────
+  useEffect(() => {
+    const loadCharactersFromApi = async () => {
+      if (!isApiAvailable()) {
+        console.log('[MyMeme] API not available, using default characters');
+        setCharsLoaded(true);
+        return;
+      }
+
+      try {
+        const apiOrigin = getApiOrigin();
+        const telegramId = getTelegramId();
+
+        if (!apiOrigin || !telegramId) {
+          setCharsLoaded(true);
+          return;
+        }
+
+        console.log('[MyMeme] Loading user and contacts from API...');
+
+        // Get current user info
+        const userInfo = await getUserInfo(telegramId, apiOrigin);
+        const currentUser = telegramUserToCharacter(userInfo);
+        setCharacter(currentUser);
+
+        // Get contacts/friends list
+        const contactsList = await getContactsList(telegramId, apiOrigin);
+        const friendCharacters = contactsList.map(telegramUserToCharacter);
+
+        // Combine: current user first, then friends
+        const allCharacters = [currentUser, ...friendCharacters];
+        setCharacters(allCharacters);
+        console.log('[MyMeme] Loaded', allCharacters.length, 'characters from API');
+      } catch (err) {
+        console.error('[MyMeme] Error loading characters from API:', err);
+        // Fallback to default characters
+        setCharacters(DEFAULT_CHARACTERS);
+        setCharacter(DEFAULT_CHARACTERS[0]);
+      } finally {
+        setCharsLoaded(true);
+      }
+    };
+
+    loadCharactersFromApi();
+  }, []);
 
   useEffect(() => {
     if (cooldownLeft <= 0) return;
@@ -99,7 +161,7 @@ export function useMyMeme() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           query: '',
-          params: { prompt, url: character.refUrl, user_id: USER_ID },
+          params: { prompt, url: character.refUrl },
         }),
         signal: abortRef.current.signal,
       });
@@ -155,7 +217,7 @@ export function useMyMeme() {
   return {
     phase,
     character,
-    characters: DEFAULT_CHARACTERS,
+    characters,
     showCharSelect,
     selectedStyle,
     styles: MEME_STYLES,
@@ -167,6 +229,7 @@ export function useMyMeme() {
     generating,
     error,
     cooldownLeft,
+    charsLoaded,
     openEditor,
     generateMeme,
     goHome,
