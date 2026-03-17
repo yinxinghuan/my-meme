@@ -102,6 +102,7 @@ function callApi(
 ): Promise<any> {
   return new Promise((resolve, reject) => {
     const requestId = requestData.request_id;
+    console.log(`[AIgram API] Calling ${requestData.url.split('?')[0]} with request_id=${requestId}`);
 
     // Set up listener for response
     const handleMessage = (event: MessageEvent) => {
@@ -114,14 +115,16 @@ function callApi(
 
           if (result.request_id === requestId) {
             window.removeEventListener('message', handleMessage);
+            console.log(`[AIgram API] Response received for request_id=${requestId}`, result);
             if (result.success) {
               resolve(result.data);
             } else {
               reject(new Error(result.error || 'API call failed'));
             }
           }
-        } catch {
+        } catch (err) {
           // ignore parse errors from unrelated messages
+          console.debug('[AIgram API] Ignoring non-API message:', message.substring(0, 50));
         }
       }
     };
@@ -131,15 +134,19 @@ function callApi(
     // Send request — AIgram SDK runs in same window context
     try {
       const encodedRequest = toBase64(JSON.stringify(requestData));
-      window.postMessage(`callAPI-${encodedRequest}`, apiOrigin);
+      console.log(`[AIgram API] Sending request to ${apiOrigin}:`, requestData);
+      // Use '*' to allow any origin to receive (AIgram SDK will handle it)
+      window.postMessage(`callAPI-${encodedRequest}`, '*');
     } catch (error) {
       window.removeEventListener('message', handleMessage);
+      console.error('[AIgram API] Error encoding request:', error);
       reject(error);
     }
 
     // Timeout after 30 seconds
     setTimeout(() => {
       window.removeEventListener('message', handleMessage);
+      console.error(`[AIgram API] Request timeout for request_id=${requestId}`);
       reject(new Error('API call timeout'));
     }, 30000);
   });
