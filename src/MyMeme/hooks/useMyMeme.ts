@@ -62,19 +62,20 @@ export function useMyMeme() {
   // ── Load characters from API on mount ────────────────
   useEffect(() => {
     const loadCharactersFromApi = async () => {
+      const apiOrigin = getApiOrigin();
+      const telegramId = getTelegramId();
+
+      console.log('[MyMeme] Init: apiOrigin=', apiOrigin, 'telegramId=', telegramId);
+
       if (!isApiAvailable()) {
-        console.log('[MyMeme] API not available, using default characters');
+        console.log('[MyMeme] API not available (missing URL params), using default characters');
         setCharsLoaded(true);
         return;
       }
 
       try {
-        const apiOrigin = getApiOrigin();
-        const telegramId = getTelegramId();
-
         if (!apiOrigin || !telegramId) {
-          setCharsLoaded(true);
-          return;
+          throw new Error('Missing API parameters');
         }
 
         console.log('[MyMeme] Loading user and contacts from API...');
