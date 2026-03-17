@@ -136,8 +136,9 @@ function callApi(
     // Send request to parent frame (AIgram iframe host)
     try {
       const encodedRequest = toBase64(JSON.stringify(requestData));
-      console.log(`[AIgram API] Sending request to parent (${apiOrigin}):`, requestData);
-      window.parent.postMessage(`callAPI-${encodedRequest}`, apiOrigin);
+      const targetOrigin = new URL(apiOrigin).origin; // strip path if any
+      console.log(`[AIgram API] Sending to parent origin=${targetOrigin}:`, requestData);
+      window.parent.postMessage(`callAPI-${encodedRequest}`, targetOrigin);
     } catch (error) {
       window.removeEventListener('message', handleMessage);
       console.error('[AIgram API] Error sending request:', error);
@@ -170,7 +171,8 @@ export async function getUserInfo(
 
   try {
     const response = await callApi(apiOrigin, request);
-    return response as TelegramUser;
+    // API wraps data: { retcode, errcode, msg, data: TelegramUser }
+    return (response?.data ?? response) as TelegramUser;
   } catch (error) {
     console.error('[AIgram API] Failed to get user info:', error);
     throw error;
@@ -194,7 +196,8 @@ export async function getContactsList(
 
   try {
     const response = await callApi(apiOrigin, request);
-    return response as TelegramUser[];
+    // API wraps data: { retcode, errcode, msg, data: TelegramUser[] }
+    return (response?.data ?? response) as TelegramUser[];
   } catch (error) {
     console.error('[AIgram API] Failed to get contacts list:', error);
     throw error;
