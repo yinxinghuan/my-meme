@@ -91,6 +91,39 @@
       background: @bg;
       box-shadow: 2px 2px 0 0 @ink;
     }
+
+    &--pending {
+      border-color: @ink;
+      border-style: dashed;
+      background: @bg-light;
+    }
+  }
+
+  // ── Confirm footer ─────────────────────────
+  &__footer {
+    padding: 10px 14px;
+    border-top: @border;
+    background: #fff;
+    flex-shrink: 0;
+  }
+
+  &__confirm-btn {
+    .mm-btn();
+    width: 100%;
+    font-size: 13px;
+    padding: 10px 16px;
+    text-align: center;
+    background: @ink;
+    color: #fff;
+
+    &--disabled {
+      background: #fff;
+      color: @ink-light;
+      box-shadow: none;
+      cursor: default;
+      border-color: @ink-faint;
+      border-style: dashed;
+    }
   }
 
   &__avatar {
