@@ -105,8 +105,6 @@ function callApi(
 
     // Set up listener for response
     const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== apiOrigin) return;
-
       const message = event.data;
       if (typeof message === 'string' && message.startsWith('callAPIResult-')) {
         try {
@@ -122,20 +120,18 @@ function callApi(
               reject(new Error(result.error || 'API call failed'));
             }
           }
-        } catch (error) {
-          window.removeEventListener('message', handleMessage);
-          reject(error);
+        } catch {
+          // ignore parse errors from unrelated messages
         }
       }
     };
 
     window.addEventListener('message', handleMessage);
 
-    // Send request
+    // Send request — AIgram SDK runs in same window context
     try {
       const encodedRequest = toBase64(JSON.stringify(requestData));
-      const targetOrigin = new URL(apiOrigin).origin;
-      window.parent.postMessage(`callAPI-${encodedRequest}`, targetOrigin);
+      window.postMessage(`callAPI-${encodedRequest}`, apiOrigin);
     } catch (error) {
       window.removeEventListener('message', handleMessage);
       reject(error);
