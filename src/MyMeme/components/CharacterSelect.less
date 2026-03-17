@@ -37,18 +37,20 @@
     touch-action: pan-y;
 
     // Style scrollbar to match UI (desktop only)
-    &::-webkit-scrollbar {
-      width: 8px;
-    }
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    &::-webkit-scrollbar-thumb {
-      background: @ink-light;
-      border: 1px solid @ink;
+    @media (hover: hover) {
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: @ink-light;
+        border: 1px solid @ink;
 
-      &:hover {
-        background: @ink;
+        &:hover {
+          background: @ink;
+        }
       }
     }
   }
