@@ -33,8 +33,10 @@
     padding: 12px 14px;
     overflow-y: auto;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
 
-    // Style scrollbar to match UI
+    // Style scrollbar to match UI (desktop only)
     &::-webkit-scrollbar {
       width: 8px;
     }
