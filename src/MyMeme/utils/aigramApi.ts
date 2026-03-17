@@ -55,6 +55,7 @@ function getQueryParam(name: string): string | null {
   return params.get(name);
 }
 
+
 /**
  * Get API origin from URL parameters
  * @returns API origin URL or null if not found
