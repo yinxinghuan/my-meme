@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { t } from '../i18n';
 import type { Character } from '../types';
+import { playSelect, playClick } from '../utils/sounds';
 import './CharacterSelect.less';
 
 interface Props {
@@ -10,6 +12,22 @@ interface Props {
 }
 
 export default function CharacterSelect({ characters, current, onPick, onClose }: Props) {
+  const [pendingId, setPendingId] = useState<string>(current.id);
+  const pendingChar = characters.find(c => c.id === pendingId) ?? current;
+  const isChanged = pendingId !== current.id;
+
+  function handleSelect(char: Character) {
+    if (char.id !== pendingId) {
+      setPendingId(char.id);
+      playSelect();
+    }
+  }
+
+  function handleConfirm() {
+    playClick();
+    onPick(pendingChar);
+  }
+
   return (
     <div className="mm-charsel">
       <div className="mm-charsel__overlay" onPointerDown={onClose} />
@@ -25,21 +43,29 @@ export default function CharacterSelect({ characters, current, onPick, onClose }
             {'>'} Select a character:<span className="mm-cursor" />
           </div>
           <div className="mm-charsel__list">
-            {characters.map(char => (
-              <div
-                key={char.id}
-                className={`mm-charsel__item ${char.id === current.id ? 'mm-charsel__item--active' : ''}`}
-                onPointerDown={() => onPick(char)}
-              >
-                <div className="mm-charsel__avatar">
-                  <img src={char.avatar} alt={char.name} draggable={false} />
+            {characters.map(char => {
+              const isConfirmed = char.id === current.id;
+              const isPending = char.id === pendingId && isChanged;
+              return (
+                <div
+                  key={char.id}
+                  className={[
+                    'mm-charsel__item',
+                    isConfirmed ? 'mm-charsel__item--active' : '',
+                    isPending ? 'mm-charsel__item--pending' : '',
+                  ].join(' ').trim()}
+                  onPointerDown={() => handleSelect(char)}
+                >
+                  <div className="mm-charsel__avatar">
+                    <img src={char.avatar} alt={char.name} draggable={false} />
+                  </div>
+                  <div className="mm-charsel__name">{char.name}</div>
+                  {isConfirmed && (
+                    <div className="mm-charsel__check">{'\u2713'}</div>
+                  )}
                 </div>
-                <div className="mm-charsel__name">{char.name}</div>
-                {char.id === current.id && (
-                  <div className="mm-charsel__check">{'\u2713'}</div>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Coming soon notice */}
@@ -51,6 +77,15 @@ export default function CharacterSelect({ characters, current, onPick, onClose }
             <div className="mm-charsel__coming-soon-sub">
               {t('charSelect.comingSoonSub')}
             </div>
+          </div>
+        </div>
+
+        <div className="mm-charsel__footer">
+          <div
+            className={`mm-charsel__confirm-btn${isChanged ? '' : ' mm-charsel__confirm-btn--disabled'}`}
+            onPointerDown={isChanged ? handleConfirm : undefined}
+          >
+            {isChanged ? `> CONFIRM: ${pendingChar.name}` : '\u2713 CONFIRMED'}
           </div>
         </div>
 
