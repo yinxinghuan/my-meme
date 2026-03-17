@@ -104,8 +104,10 @@ function callApi(
     const requestId = requestData.request_id;
     console.log(`[AIgram API] Calling ${requestData.url.split('?')[0]} with request_id=${requestId}`);
 
-    // Set up listener for response
+    // Set up listener for response — comes from parent frame (apiOrigin)
+    const expectedOrigin = new URL(apiOrigin).origin;
     const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== expectedOrigin) return;
       const message = event.data;
       if (typeof message === 'string' && message.startsWith('callAPIResult-')) {
         try {
@@ -131,15 +133,14 @@ function callApi(
 
     window.addEventListener('message', handleMessage);
 
-    // Send request — AIgram SDK runs in same window context
+    // Send request to parent frame (AIgram iframe host)
     try {
       const encodedRequest = toBase64(JSON.stringify(requestData));
-      console.log(`[AIgram API] Sending request to ${apiOrigin}:`, requestData);
-      // Use '*' to allow any origin to receive (AIgram SDK will handle it)
-      window.postMessage(`callAPI-${encodedRequest}`, '*');
+      console.log(`[AIgram API] Sending request to parent (${apiOrigin}):`, requestData);
+      window.parent.postMessage(`callAPI-${encodedRequest}`, apiOrigin);
     } catch (error) {
       window.removeEventListener('message', handleMessage);
-      console.error('[AIgram API] Error encoding request:', error);
+      console.error('[AIgram API] Error sending request:', error);
       reject(error);
     }
 
