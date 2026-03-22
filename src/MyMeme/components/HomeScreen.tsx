@@ -9,10 +9,11 @@ interface Props {
   onEdit: (style: MemeStyle) => void;
   onQuickGenerate: (style: MemeStyle) => void;
   onOpenCharSelect: () => void;
+  onLeaderboard: () => void;
   logoSrc: string;
 }
 
-export default function HomeScreen({ character, styles, cooldownLeft, onEdit, onQuickGenerate, onOpenCharSelect, logoSrc }: Props) {
+export default function HomeScreen({ character, styles, cooldownLeft, onEdit, onQuickGenerate, onOpenCharSelect, onLeaderboard, logoSrc }: Props) {
   const onCooldown = cooldownLeft > 0;
   return (
     <div className="mm-home">
@@ -82,6 +83,8 @@ export default function HomeScreen({ character, styles, cooldownLeft, onEdit, on
               </div>
             ))}
           </div>
+
+          <button className="mm-home__lb-icon" onPointerDown={onLeaderboard}>🏆</button>
 
           {/* Footer */}
           <div className="mm-home__footer">
