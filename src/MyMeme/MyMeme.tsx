@@ -33,9 +33,6 @@ export default function MyMeme() {
   return (
     <div className="mm">
       {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
-      {splashDone && state.phase === 'home' && (
-        <button className="mm__lb-icon" onPointerDown={() => setShowLeaderboard(true)}>🏆</button>
-      )}
       {showLeaderboard && (
         <Leaderboard
           gameName="My Meme"
@@ -54,6 +51,7 @@ export default function MyMeme() {
           onEdit={state.openEditor}
           onQuickGenerate={state.generateMeme}
           onOpenCharSelect={state.openCharSelect}
+          onLeaderboard={() => setShowLeaderboard(true)}
           logoSrc={aigramSrc}
         />
       )}
