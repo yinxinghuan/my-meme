@@ -6,7 +6,7 @@ export default defineConfig({
   base: '/my-meme/',
   plugins: [react()],
   resolve: {
-    alias: { '@shared': path.resolve(__dirname, '../shared') },
+    alias: { '@shared': path.resolve(__dirname, 'src/shared') },
   },
   css: {
     preprocessorOptions: {
