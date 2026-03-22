@@ -245,6 +245,29 @@
     }
   }
 
+  // ── Leaderboard button ─────────────────────
+  &__lb-btn {
+    display: block;
+    width: 100%;
+    font-family: @mono;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: @ink-light;
+    background: transparent;
+    border: 1px dashed @ink-faint;
+    padding: 10px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+
+    &:active {
+      background: @ink;
+      color: #fff;
+    }
+  }
+
   // ── Footer ────────────────────────────────
   &__footer {
     padding: 16px 0 24px;
