@@ -41,10 +41,12 @@ export default function MemeEditor({
 
           <div className="mm-hatch-block" />
 
-          {/* Side-by-side scene inputs */}
-          <div className="mm-editor__panels">
+          {/* Scene inputs */}
+          <div className={`mm-editor__panels ${style.layout === 'tb' ? 'mm-editor__panels--tb' : ''}`}>
             <div className="mm-editor__panel">
-              <label className="mm-editor__label">{t('editor.scene1')}_</label>
+              <label className="mm-editor__label">
+                {t(style.layout === 'tb' ? 'editor.scene1.tb' : 'editor.scene1')}_
+              </label>
               <textarea
                 className="mm-editor__input"
                 value={scene1}
@@ -54,7 +56,9 @@ export default function MemeEditor({
               />
             </div>
             <div className="mm-editor__panel">
-              <label className="mm-editor__label">{t('editor.scene2')}_</label>
+              <label className="mm-editor__label">
+                {t(style.layout === 'tb' ? 'editor.scene2.tb' : 'editor.scene2')}_
+              </label>
               <textarea
                 className="mm-editor__input"
                 value={scene2}

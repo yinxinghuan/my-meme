@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { t } from '../i18n';
-import type { Character, MemeStyle } from '../types';
+import type { Character, MemeStyle, FilterTab } from '../types';
 import './HomeScreen.less';
 
 interface Props {
@@ -13,8 +14,25 @@ interface Props {
   logoSrc: string;
 }
 
+const TABS: { id: FilterTab; key: string }[] = [
+  { id: 'all', key: 'cat.all' },
+  { id: 'vertical', key: 'cat.vertical' },
+  { id: 'work', key: 'cat.work' },
+  { id: 'daily', key: 'cat.daily' },
+  { id: 'social', key: 'cat.social' },
+  { id: 'tech', key: 'cat.tech' },
+];
+
 export default function HomeScreen({ character, styles, cooldownLeft, onEdit, onQuickGenerate, onOpenCharSelect, onLeaderboard, logoSrc }: Props) {
   const onCooldown = cooldownLeft > 0;
+  const [activeTab, setActiveTab] = useState<FilterTab>('all');
+
+  const filtered = styles.filter(s => {
+    if (activeTab === 'all') return true;
+    if (activeTab === 'vertical') return s.layout === 'tb';
+    return s.category === activeTab;
+  });
+
   return (
     <div className="mm-home">
       <div className="mm-home__win mm-win">
@@ -54,9 +72,22 @@ export default function HomeScreen({ character, styles, cooldownLeft, onEdit, on
 
           <div className="mm-hatch-block" />
 
+          {/* Category tabs */}
+          <div className="mm-home__tabs">
+            {TABS.map(tab => (
+              <button
+                key={tab.id}
+                className={`mm-home__tab ${activeTab === tab.id ? 'mm-home__tab--active' : ''}`}
+                onPointerDown={() => setActiveTab(tab.id)}
+              >
+                {t(tab.key)}
+              </button>
+            ))}
+          </div>
+
           {/* Meme list — flat, single column, large cards */}
           <div className="mm-home__list">
-            {styles.map(style => (
+            {filtered.map(style => (
               <div key={style.id} className="mm-home__meme mm-card">
                 {style.preview && (
                   <div className="mm-home__meme-preview">
@@ -97,7 +128,7 @@ export default function HomeScreen({ character, styles, cooldownLeft, onEdit, on
             <img src={logoSrc} alt="" draggable={false} className="mm-win__statusbar-logo" />
             C:\MEME\HOME
           </span>
-          <span>{styles.length} MEMES</span>
+          <span>{filtered.length} MEMES</span>
         </div>
       </div>
 

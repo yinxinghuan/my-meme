@@ -12,8 +12,11 @@ export interface MemeStyle {
   nameKey: string;
   descKey: string;
   category: 'work' | 'daily' | 'social' | 'tech';
+  layout?: 'lr' | 'tb';        // left-right (default) or top-bottom
   promptTemplate: string;       // prompt with {character}, {scene1}, {scene2}
-  defaultScene1: string;        // default left panel / scene 1 text
-  defaultScene2: string;        // default right panel / scene 2 text
+  defaultScene1: string;        // default left/top panel text
+  defaultScene2: string;        // default right/bottom panel text
   preview?: string;             // preview image import
 }
+
+export type FilterTab = 'all' | 'work' | 'daily' | 'social' | 'tech' | 'vertical';

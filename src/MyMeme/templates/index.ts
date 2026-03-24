@@ -27,6 +27,16 @@ import prevWorksOnMyMachine from '../img/previews/works_on_my_machine.png';
 import prevDarkMode from '../img/previews/dark_mode.png';
 import prevNoComments from '../img/previews/no_comments.png';
 
+// Top-bottom layout previews
+import prevBatteryDrain from '../img/previews/battery_drain.png';
+import prevDeadlinePanic from '../img/previews/deadline_panic.png';
+import prevNewYearDay2 from '../img/previews/new_year_day2.png';
+import prevPackageWait from '../img/previews/package_wait.png';
+import prevCoffeeEffect from '../img/previews/coffee_effect.png';
+import prevInstallUpdate from '../img/previews/install_update.png';
+import prevPhoneNotif from '../img/previews/phone_notif.png';
+import prevBudgetReality from '../img/previews/budget_reality.png';
+
 // Original 12 previews
 import prevOvertime from '../img/previews/overtime.png';
 import prevMeetingMute from '../img/previews/meeting_mute.png';
@@ -56,6 +66,13 @@ const S = 'two-panel comic, bold clean illustration style, thick outlines, flat 
 // Helper to build prompt template with {scene1}/{scene2} placeholders
 const T = (scene1Prompt: string, scene2Prompt: string) =>
   S + `left panel: {character} ${scene1Prompt}, right panel: {character} ${scene2Prompt}`;
+
+// Top-bottom layout base style
+const TB_S = 'vertical two-panel comic strip stacked top and bottom, bold clean illustration style, thick outlines, flat colors, expressive faces, western comic book style, panel borders, all text in English, no Chinese Japanese Korean characters, ';
+
+// Helper for top-bottom layout
+const TB = (topPrompt: string, botPrompt: string) =>
+  TB_S + `top panel: {character} ${topPrompt}, bottom panel: {character} ${botPrompt}`;
 
 export const MEME_STYLES: MemeStyle[] = [
   // ── HOT / TRENDING ────────────────────────
@@ -276,5 +293,63 @@ export const MEME_STYLES: MemeStyle[] = [
     defaultScene1: 'proudly refusing to write code comments, nose in air',
     defaultScene2: '3 months later staring at own code with zero comprehension',
     promptTemplate: T('{scene1}, speech bubble my code is self-documenting', '{scene2}, speech bubble who wrote this garbage'),
+  },
+
+  // ── TOP-BOTTOM LAYOUT ─────────────────────
+  {
+    id: 'battery-drain', preview: prevBatteryDrain, nameKey: 'meme.batterydrain.name', descKey: 'meme.batterydrain.desc',
+    category: 'daily', layout: 'tb',
+    defaultScene1: 'phone shows 100% battery, making ambitious plans for the day',
+    defaultScene2: 'phone shows 1% battery, frantic panic searching for charger',
+    promptTemplate: TB('{scene1}, battery icon FULL 100%, energetic, text ALL DAY PLANS', '{scene2}, battery icon 1% blinking red, sweat rain, desperate'),
+  },
+  {
+    id: 'deadline-panic', preview: prevDeadlinePanic, nameKey: 'meme.deadlinepanic.name', descKey: 'meme.deadlinepanic.desc',
+    category: 'work', layout: 'tb',
+    defaultScene1: 'calendar shows 2 WEEKS TO DEADLINE, leaning back, sipping coffee, unbothered',
+    defaultScene2: 'clock shows 2 HOURS LEFT, eyes wild, keyboard flying, room on fire',
+    promptTemplate: TB('{scene1}, calm confident, text 2 WEEKS LEFT', '{scene2}, full meltdown, empty pizza boxes, text 2 HOURS LEFT'),
+  },
+  {
+    id: 'new-year-day2', preview: prevNewYearDay2, nameKey: 'meme.newyearday2.name', descKey: 'meme.newyearday2.desc',
+    category: 'daily', layout: 'tb',
+    defaultScene1: 'Jan 1, writing long ambitious resolution list, motivated, text NEW YEAR NEW ME',
+    defaultScene2: 'Jan 2, lying on couch eating chips, list crumpled on floor, text NEVER MIND',
+    promptTemplate: TB('{scene1}, sparkles and confetti, hopeful glow', '{scene2}, potato mode, resolution paper in trash'),
+  },
+  {
+    id: 'package-wait', preview: prevPackageWait, nameKey: 'meme.packagewait.name', descKey: 'meme.packagewait.desc',
+    category: 'daily', layout: 'tb',
+    defaultScene1: 'excitedly tracking package app showing ARRIVES TOMORROW, clapping hands',
+    defaultScene2: 'one week later still waiting, checking phone obsessively, text WHERE IS IT',
+    promptTemplate: TB('{scene1}, package app on phone, stars in eyes', '{scene2}, curtain-peeking at empty door, calendar shows 7 DAYS'),
+  },
+  {
+    id: 'coffee-effect', preview: prevCoffeeEffect, nameKey: 'meme.coffeeeffect.name', descKey: 'meme.coffeeeffect.desc',
+    category: 'daily', layout: 'tb',
+    defaultScene1: 'before coffee, zombie face, dark rings under eyes, shuffling forward, text BEFORE',
+    defaultScene2: 'after first sip, fully awake and glowing, cape fluttering, superhero pose, text AFTER',
+    promptTemplate: TB('{scene1}, grey dead inside, dragging feet, coffee cup empty', '{scene2}, lightning bolts, coffee cup in hand, ready to conquer world'),
+  },
+  {
+    id: 'install-update', preview: prevInstallUpdate, nameKey: 'meme.installupdate.name', descKey: 'meme.installupdate.desc',
+    category: 'tech', layout: 'tb',
+    defaultScene1: 'confidently clicking UPDATE NOW 5 minutes before important meeting, relaxed smile',
+    defaultScene2: 'trapped staring at progress bar stuck at 37% while meeting started 20 minutes ago',
+    promptTemplate: TB('{scene1}, laptop screen shows UPDATE NOW button, text 5 MIN TO MEETING', '{scene2}, progress bar 37% frozen, meeting notification blinking, cold sweat, text STILL UPDATING'),
+  },
+  {
+    id: 'phone-notif', preview: prevPhoneNotif, nameKey: 'meme.phonenotif.name', descKey: 'meme.phonenotif.desc',
+    category: 'social', layout: 'tb',
+    defaultScene1: 'sees message notification, too busy, decides to reply later, text READ',
+    defaultScene2: 'one week later, notification buried under 200 others, too embarrassed to reply now',
+    promptTemplate: TB('{scene1}, glancing at phone with one eyebrow up, speech bubble LATER', '{scene2}, hundreds of notification badges, hiding face in hands, speech bubble ITS BEEN TOO LONG'),
+  },
+  {
+    id: 'budget-reality', preview: prevBudgetReality, nameKey: 'meme.budgetreality.name', descKey: 'meme.budgetreality.desc',
+    category: 'work', layout: 'tb',
+    defaultScene1: 'start of month, proudly writing detailed budget spreadsheet, text BUDGET PLAN',
+    defaultScene2: 'end of month, bank notification shows account nearly empty, text ACTUAL RESULT',
+    promptTemplate: TB('{scene1}, calculator and spreadsheet, determined face, coins stacked', '{scene2}, bank app shows almost zero, wallet blowing empty, head in hands'),
   },
 ];
