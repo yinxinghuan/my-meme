@@ -59,6 +59,23 @@
     max-width: 360px;
   }
 
+  &__post {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    min-height: 52px;
+    margin-bottom: 10px;
+    background: #4f46e5;
+    color: #fff;
+    border-color: #3730a3;
+    box-shadow: 3px 3px 0 0 #3730a3;
+
+    &--posting { opacity: 0.6; cursor: default; }
+    &--posted  { background: #2d8f2d; border-color: #1a5c1a; box-shadow: 3px 3px 0 0 #1a5c1a; }
+    &--failed  { background: #b91c1c; border-color: #7f1d1d; box-shadow: 3px 3px 0 0 #7f1d1d; }
+  }
+
   &__save {
     width: 100%;
     padding: 16px;
