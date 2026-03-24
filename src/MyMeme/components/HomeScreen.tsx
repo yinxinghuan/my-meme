@@ -26,6 +26,7 @@ export default function HomeScreen({ character, styles, cooldownLeft, onEdit, on
         <div className="mm-win__body mm-home__body">
           {/* Header */}
           <div className="mm-home__header">
+            <button className="mm-home__lb-icon" onPointerDown={onLeaderboard}>🏆</button>
             <div className="mm-home__title-row">
               <span className="mm-home__brace">{'{'}</span>
               <span className="mm-home__title-text">MY MEME</span>
@@ -83,8 +84,6 @@ export default function HomeScreen({ character, styles, cooldownLeft, onEdit, on
               </div>
             ))}
           </div>
-
-          <button className="mm-home__lb-icon" onPointerDown={onLeaderboard}>🏆</button>
 
           {/* Footer */}
           <div className="mm-home__footer">
