@@ -57,14 +57,24 @@ export default function MemeResult({ imageUrl, cooldownLeft, isInAigram, onRetry
     if (postState !== 'idle') return;
     setPostState('posting');
     try {
-      await callAigramAPI('/note/telegram/note/add', 'POST', {
+      const res = await callAigramAPI('/note/telegram/note/add', 'POST', {
         photo_url: imageUrl,
         type: 7,
         telegram_id_list: [],
         style: 'No Style',
-      });
+      }) as { data: string };
       setPostState('posted');
-      setTimeout(() => setPostState('idle'), 3000);
+      // Open the new post's detail page
+      const postId = typeof res === 'string' ? res : res?.data;
+      if (postId) {
+        const apiOrigin = new URLSearchParams(window.location.search).get('api_origin');
+        if (apiOrigin) {
+          window.parent.postMessage(
+            `AW.POST.OPEN-${toB64(JSON.stringify({ post_id: postId }))}`,
+            apiOrigin
+          );
+        }
+      }
     } catch {
       setPostState('failed');
       setTimeout(() => setPostState('idle'), 2500);
