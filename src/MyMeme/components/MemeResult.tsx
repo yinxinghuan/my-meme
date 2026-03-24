@@ -15,6 +15,9 @@ interface Props {
 
 type PostState = 'idle' | 'posting' | 'posted' | 'failed';
 
+function toB64(s: string): string { return btoa(unescape(encodeURIComponent(s))); }
+function fromB64(s: string): string { return decodeURIComponent(escape(atob(s))); }
+
 function callAigramAPI(url: string, method: 'GET' | 'POST', data: unknown): Promise<unknown> {
   const params = new URLSearchParams(window.location.search);
   const apiOrigin = params.get('api_origin');
@@ -27,7 +30,7 @@ function callAigramAPI(url: string, method: 'GET' | 'POST', data: unknown): Prom
       const msg = typeof e.data === 'string' ? e.data : '';
       if (!msg.startsWith('callAPIResult-')) return;
       try {
-        const r = JSON.parse(atob(msg.slice('callAPIResult-'.length)));
+        const r = JSON.parse(fromB64(msg.slice('callAPIResult-'.length)));
         if (r.request_id !== requestId) return;
         window.removeEventListener('message', handler);
         clearTimeout(timer);
@@ -36,7 +39,7 @@ function callAigramAPI(url: string, method: 'GET' | 'POST', data: unknown): Prom
     };
     window.addEventListener('message', handler);
     window.parent.postMessage(
-      `callAPI-${btoa(JSON.stringify({ url, method, data, request_id: requestId, emitter: window.location.origin }))}`,
+      `callAPI-${toB64(JSON.stringify({ url, method, data, request_id: requestId, emitter: window.location.origin }))}`,
       apiOrigin
     );
     timer = setTimeout(() => { window.removeEventListener('message', handler); reject(new Error('timeout')); }, 15_000);
