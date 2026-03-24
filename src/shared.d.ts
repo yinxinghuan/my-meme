@@ -25,6 +25,7 @@ declare module '@shared/leaderboard' {
     submitScore: (score: number) => Promise<void>;
     fetchGlobalLeaderboard: () => Promise<LeaderboardEntry[]>;
     fetchFriendsLeaderboard: () => Promise<LeaderboardEntry[]>;
+    postToAigram: (photoUrl: string) => Promise<string | null>;
   }
   export function useGameScore(gameId: string): GameScoreResult;
 }
