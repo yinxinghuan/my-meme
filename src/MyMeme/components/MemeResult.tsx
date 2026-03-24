@@ -7,6 +7,7 @@ interface Props {
   imageUrl: string;
   cooldownLeft: number;
   isInAigram: boolean;
+  onPost: (photoUrl: string) => Promise<string | null>;
   onRetry: () => void;
   onBack: () => void;
   onHome: () => void;
@@ -15,40 +16,9 @@ interface Props {
 
 type PostState = 'idle' | 'posting' | 'posted' | 'failed';
 
-function toB64(s: string): string { return btoa(unescape(encodeURIComponent(s))); }
-function fromB64(s: string): string { return decodeURIComponent(escape(atob(s))); }
-
-function callAigramAPI(url: string, method: 'GET' | 'POST', data: unknown): Promise<unknown> {
-  const params = new URLSearchParams(window.location.search);
-  const apiOrigin = params.get('api_origin');
-  if (!apiOrigin) return Promise.reject(new Error('not in aigram'));
-  return new Promise((resolve, reject) => {
-    const requestId = crypto.randomUUID();
-    let timer: ReturnType<typeof setTimeout>;
-    const handler = (e: MessageEvent) => {
-      if (e.origin !== apiOrigin) return;
-      const msg = typeof e.data === 'string' ? e.data : '';
-      if (!msg.startsWith('callAPIResult-')) return;
-      try {
-        const r = JSON.parse(fromB64(msg.slice('callAPIResult-'.length)));
-        if (r.request_id !== requestId) return;
-        window.removeEventListener('message', handler);
-        clearTimeout(timer);
-        if (r.success) resolve(r.data); else reject(new Error(r.error ?? 'API error'));
-      } catch { /* ignore */ }
-    };
-    window.addEventListener('message', handler);
-    window.parent.postMessage(
-      `callAPI-${toB64(JSON.stringify({ url, method, data, request_id: requestId, emitter: window.location.origin }))}`,
-      apiOrigin
-    );
-    timer = setTimeout(() => { window.removeEventListener('message', handler); reject(new Error('timeout')); }, 15_000);
-  });
-}
-
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-export default function MemeResult({ imageUrl, cooldownLeft, isInAigram, onRetry, onBack, onHome, logoSrc }: Props) {
+export default function MemeResult({ imageUrl, cooldownLeft, isInAigram, onPost, onRetry, onBack, onHome, logoSrc }: Props) {
   const onCooldown = cooldownLeft > 0;
   const [saved, setSaved] = useState(false);
   const [postState, setPostState] = useState<PostState>('idle');
@@ -57,29 +27,13 @@ export default function MemeResult({ imageUrl, cooldownLeft, isInAigram, onRetry
     if (postState !== 'idle') return;
     setPostState('posting');
     try {
-      const res = await callAigramAPI('/note/telegram/note/add', 'POST', {
-        photo_url: imageUrl,
-        type: 7,
-        telegram_id_list: [],
-        style: 'No Style',
-      }) as { data: string };
+      await onPost(imageUrl);
       setPostState('posted');
-      // Open the new post's detail page
-      const postId = typeof res === 'string' ? res : res?.data;
-      if (postId) {
-        const apiOrigin = new URLSearchParams(window.location.search).get('api_origin');
-        if (apiOrigin) {
-          window.parent.postMessage(
-            `AW.POST.OPEN-${toB64(JSON.stringify({ post_id: postId }))}`,
-            apiOrigin
-          );
-        }
-      }
     } catch {
       setPostState('failed');
       setTimeout(() => setPostState('idle'), 2500);
     }
-  }, [imageUrl, postState]);
+  }, [imageUrl, postState, onPost]);
 
   const markSaved = useCallback(() => {
     playSave();

@@ -37,7 +37,12 @@ function getAigramContext() {
   return { telegramId, apiOrigin };
 }
 
-function callAigramAPI<T>(apiOrigin: string, url: string): Promise<T> {
+function callAigramAPI<T>(
+  apiOrigin: string,
+  url: string,
+  method: 'GET' | 'POST' = 'GET',
+  data: unknown = null,
+): Promise<T> {
   return new Promise((resolve, reject) => {
     const requestId = crypto.randomUUID();
     let timer: ReturnType<typeof setTimeout>;
@@ -60,8 +65,8 @@ function callAigramAPI<T>(apiOrigin: string, url: string): Promise<T> {
     window.parent.postMessage(
       `callAPI-${toBase64(JSON.stringify({
         url,
-        method: 'GET',
-        data: null,
+        method,
+        data,
         request_id: requestId,
         emitter: window.location.origin,
       }))}`,
@@ -70,7 +75,7 @@ function callAigramAPI<T>(apiOrigin: string, url: string): Promise<T> {
     timer = setTimeout(() => {
       window.removeEventListener('message', handler);
       reject(new Error('timeout'));
-    }, 10_000);
+    }, 15_000);
   });
 }
 
@@ -145,6 +150,26 @@ export function useGameScore(gameId: string) {
     }
   }, [gameId, telegramId, apiOrigin, isInAigram]);
 
+  const postToAigram = useCallback(async (photoUrl: string): Promise<string | null> => {
+    if (!isInAigram || !apiOrigin) throw new Error('not in aigram');
+    const res = await callAigramAPI<{ data: string }>(
+      apiOrigin,
+      '/note/telegram/note/add',
+      'POST',
+      { photo_url: photoUrl, type: 7, telegram_id_list: [], style: 'No Style' },
+    );
+    const postId = typeof res === 'string' ? res : (res as { data: string })?.data ?? null;
+    if (postId) {
+      try {
+        window.parent.postMessage(
+          `AW.POST.OPEN-${toBase64(JSON.stringify({ post_id: postId }))}`,
+          apiOrigin
+        );
+      } catch { /* ignore */ }
+    }
+    return postId;
+  }, [isInAigram, apiOrigin]);
+
   return {
     isInAigram,
     telegramId,
@@ -152,5 +177,6 @@ export function useGameScore(gameId: string) {
     submitScore,
     fetchGlobalLeaderboard,
     fetchFriendsLeaderboard,
+    postToAigram,
   };
 }
