@@ -9,13 +9,17 @@ const MESSAGES: Record<string, Record<Locale, string>> = {
   'home.edit': { zh: '编辑', en: 'Edit' },
   'home.generate': { zh: '生成', en: 'GO' },
 
+  'cat.all': { zh: '全部', en: 'ALL' },
   'cat.work': { zh: '职场', en: 'WORK' },
   'cat.daily': { zh: '日常', en: 'DAILY' },
   'cat.social': { zh: '社交', en: 'SOCIAL' },
   'cat.tech': { zh: '技术', en: 'TECH' },
+  'cat.vertical': { zh: '上下格', en: 'TOP·BOT' },
 
   'editor.scene1': { zh: '左格场景', en: 'LEFT PANEL' },
   'editor.scene2': { zh: '右格场景', en: 'RIGHT PANEL' },
+  'editor.scene1.tb': { zh: '上格场景', en: 'TOP PANEL' },
+  'editor.scene2.tb': { zh: '下格场景', en: 'BOTTOM PANEL' },
   'editor.generate': { zh: '生成 MEME', en: 'GENERATE MEME' },
   'editor.wait': { zh: '冷却中', en: 'COOLDOWN' },
 
@@ -128,6 +132,24 @@ const MESSAGES: Record<string, Record<Locale, string>> = {
   'meme.darkmode.desc': { zh: '深夜暗黑模式 → 突然白屏闪瞎', en: 'Dark mode bliss → white page blinds' },
   'meme.nocomments.name': { zh: '我的代码会说话', en: 'Self-Documenting Code' },
   'meme.nocomments.desc': { zh: '不写注释 → 3个月后看不懂', en: 'No comments needed → WTF is this' },
+
+  // ── 上下布局 ──────────────────────────────
+  'meme.batterydrain.name': { zh: '电量焦虑症', en: 'Battery Panic' },
+  'meme.batterydrain.desc': { zh: '100%电量 → 1%的绝望', en: '100% full plans → 1% pure panic' },
+  'meme.deadlinepanic.name': { zh: 'Deadline来袭', en: 'Deadline Countdown' },
+  'meme.deadlinepanic.desc': { zh: '还有两周好悠闲 → 还剩两小时炸了', en: '2 weeks: chill → 2 hours: meltdown' },
+  'meme.newyearday2.name': { zh: '新年计划活了一天', en: 'New Year Day 2' },
+  'meme.newyearday2.desc': { zh: '元旦立flag → 元旦+1躺平', en: 'Jan 1: big plans → Jan 2: gave up' },
+  'meme.packagewait.name': { zh: '明天到货？', en: 'Package Tracking' },
+  'meme.packagewait.desc': { zh: '显示明日达 → 一周后还没到', en: 'Arrives tomorrow → still waiting a week' },
+  'meme.coffeeeffect.name': { zh: '咖啡前 vs 咖啡后', en: 'Before vs After Coffee' },
+  'meme.coffeeeffect.desc': { zh: '喝咖啡前：行尸走肉，喝完：超人', en: 'Zombie → superhero (coffee did that)' },
+  'meme.installupdate.name': { zh: '会议前5分钟更新', en: 'Update Before Meeting' },
+  'meme.installupdate.desc': { zh: '会议前自信点更新 → 卡在37%', en: '5 min to meeting: UPDATE NOW → 37% stuck' },
+  'meme.phonenotif.name': { zh: '稍后回复', en: 'Reply Later... Never' },
+  'meme.phonenotif.desc': { zh: '看到消息：等下回 → 一周后：太晚了', en: 'See message: reply later → too late now' },
+  'meme.budgetreality.name': { zh: '预算 vs 实际', en: 'Budget vs Reality' },
+  'meme.budgetreality.desc': { zh: '月初认真做预算 → 月末看账单哭晕', en: 'Month start: budget plan → month end: broke' },
 };
 
 function detectLocale(): Locale {
