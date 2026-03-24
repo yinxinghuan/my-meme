@@ -29,6 +29,10 @@ const MESSAGES: Record<string, Record<Locale, string>> = {
   'result.longPressHint': { zh: '长按图片也可以保存', en: 'Long press image to save' },
   'result.title': { zh: 'OUTPUT_', en: 'OUTPUT_' },
   'result.retry': { zh: '换一张', en: 'RETRY' },
+  'result.post': { zh: '发布到 Aigram', en: 'POST TO AIGRAM' },
+  'result.posting': { zh: '发布中...', en: 'POSTING...' },
+  'result.posted': { zh: '已发布！', en: 'POSTED!' },
+  'result.postFail': { zh: '发布失败', en: 'POST FAILED' },
 
   'home.beta': { zh: '> 测试版仅含少量角色', en: '> Beta: limited characters' },
   'home.betaTag': { zh: 'BETA TEST', en: 'BETA TEST' },

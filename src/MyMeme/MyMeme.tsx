@@ -84,6 +84,7 @@ export default function MyMeme() {
         <MemeResult
           imageUrl={state.resultImage}
           cooldownLeft={state.cooldownLeft}
+          isInAigram={isInAigram}
           onRetry={() => state.generateMeme()}
           onBack={state.goEditor}
           onHome={state.goHome}
