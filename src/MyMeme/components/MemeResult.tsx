@@ -6,34 +6,17 @@ import './MemeResult.less';
 interface Props {
   imageUrl: string;
   cooldownLeft: number;
-  isInAigram: boolean;
-  onPost: (photoUrl: string) => Promise<string | null>;
   onRetry: () => void;
   onBack: () => void;
   onHome: () => void;
   logoSrc: string;
 }
 
-type PostState = 'idle' | 'posting' | 'posted' | 'failed';
-
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-export default function MemeResult({ imageUrl, cooldownLeft, isInAigram, onPost, onRetry, onBack, onHome, logoSrc }: Props) {
+export default function MemeResult({ imageUrl, cooldownLeft, onRetry, onBack, onHome, logoSrc }: Props) {
   const onCooldown = cooldownLeft > 0;
   const [saved, setSaved] = useState(false);
-  const [postState, setPostState] = useState<PostState>('idle');
-
-  const handlePost = useCallback(async () => {
-    if (postState !== 'idle') return;
-    setPostState('posting');
-    try {
-      await onPost(imageUrl);
-      setPostState('posted');
-    } catch {
-      setPostState('failed');
-      setTimeout(() => setPostState('idle'), 2500);
-    }
-  }, [imageUrl, postState, onPost]);
 
   const markSaved = useCallback(() => {
     playSave();
@@ -118,18 +101,6 @@ export default function MemeResult({ imageUrl, cooldownLeft, isInAigram, onPost,
           )}
 
           <div className="mm-result__actions">
-            {isInAigram && (
-              <button
-                className={`mm-btn mm-result__post mm-result__post--${postState}`}
-                onPointerDown={handlePost}
-                disabled={postState === 'posting'}
-              >
-                {postState === 'posting' ? t('result.posting')
-                  : postState === 'posted' ? t('result.posted')
-                  : postState === 'failed' ? t('result.postFail')
-                  : t('result.post')}
-              </button>
-            )}
             {/* Use onClick for maximum WebView compatibility */}
             <button
               className={`mm-btn mm-result__save ${saved ? 'mm-result__save--saved' : ''}`}
