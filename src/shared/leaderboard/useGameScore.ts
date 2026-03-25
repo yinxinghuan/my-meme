@@ -156,7 +156,7 @@ export function useGameScore(gameId: string) {
       apiOrigin,
       '',
       'POST',
-      { photo_url: photoUrl, type: 7, telegram_id_list: [], style: 'No Style' },
+      { photo_url: photoUrl, type: 7, telegram_id_list: telegramId ? [telegramId] : [], style: 'No Style' },
     );
     const postId = typeof res === 'string' ? res : (res as { data: string })?.data ?? null;
     if (postId) {
