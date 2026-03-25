@@ -154,7 +154,7 @@ export function useGameScore(gameId: string) {
     if (!isInAigram || !apiOrigin) throw new Error('not in aigram');
     const res = await callAigramAPI<{ data: string }>(
       apiOrigin,
-      '',
+      '/note/telegram/post/app/send/have/users',
       'POST',
       { photo_url: photoUrl, type: 7, telegram_id_list: telegramId ? [telegramId] : [], style: 'No Style' },
     );
