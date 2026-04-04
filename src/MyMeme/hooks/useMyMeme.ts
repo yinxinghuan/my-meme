@@ -26,7 +26,7 @@ const DEFAULT_CHARACTERS: Character[] = [
 ];
 
 const API_URL = 'https://meme-api-proxy.xinghuan-yin.workers.dev/';
-const COOLDOWN_MS = 75000; // 75 seconds
+const COOLDOWN_MS = 20000; // 20 seconds
 
 /**
  * Convert Telegram user to Character
