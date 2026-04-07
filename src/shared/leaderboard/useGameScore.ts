@@ -136,17 +136,21 @@ export function useGameScore(gameId: string) {
       );
       // Aigram may return { data: [...] } or a direct array — handle both
       const list: AigramUser[] = Array.isArray(contacts) ? contacts : (contacts?.data ?? []);
+      console.log('[LB] contacts raw:', contacts, 'list:', list);
       list.forEach(f => { if (f.telegram_id) friendIds.add(String(f.telegram_id)); });
-    } catch { /* contacts fetch failed — still query with current user only */ }
+    } catch (e) { console.warn('[LB] contacts fetch failed:', e); }
 
     try {
       const ids = [...friendIds].join(',');
+      console.log('[LB] querying friends ids:', ids);
       const res = await fetch(
         `${GAMES_API}/leaderboard?game_id=${gameId}&telegram_ids=${encodeURIComponent(ids)}`
       );
       const json = await res.json() as { leaderboard: LeaderboardEntry[] };
+      console.log('[LB] friends result:', json);
       return json.leaderboard.map(e => ({ ...e, isMe: e.telegram_id === telegramId }));
-    } catch {
+    } catch (e) {
+      console.error('[LB] games api failed:', e);
       return [];
     }
   }, [gameId, telegramId, apiOrigin, isInAigram]);
