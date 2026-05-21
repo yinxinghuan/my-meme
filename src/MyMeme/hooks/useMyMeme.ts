@@ -3,6 +3,7 @@ import type { AppPhase, Character, MemeStyle } from '../types';
 import { MEME_STYLES, CHARACTER_PROMPTS } from '../templates';
 import { playClick, playGenerating, playSuccess, playError, playSelect } from '../utils/sounds';
 import { getApiOrigin, getTelegramId, getUserInfo, getContactsList, isApiAvailable } from '../utils/aigramApi';
+import { useGenImage } from '../../shared/runtime/useGenImage';
 
 import avatarCrisvelita from '../img/avatars/crisvelita.png';
 import avatarAlgram from '../img/avatars/algram.png';
@@ -25,7 +26,6 @@ const DEFAULT_CHARACTERS: Character[] = [
   { id: 'isabel', name: 'Isabel', avatar: avatarIsabel, refUrl: `${R2}/isabel.png` },
 ];
 
-const API_URL = 'https://meme-api-proxy.xinghuan-yin.workers.dev/';
 const COOLDOWN_MS = 20000; // 20 seconds
 
 /**
@@ -52,8 +52,12 @@ export function useMyMeme() {
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const abortRef = useRef<AbortController | null>(null);
+  // True while user has navigated away from the in-flight generation, so the
+  // ~200s-late response from useGenImage doesn't yank them back to /result.
+  const cancelledRef = useRef(false);
   const [charsLoaded, setCharsLoaded] = useState(false);
+
+  const { generate } = useGenImage();
 
   // ── Cooldown timer ──────────────────────────────────
   const [cooldownLeft, setCooldownLeft] = useState(0); // seconds remaining
@@ -155,33 +159,20 @@ export function useMyMeme() {
     const prompt = buildPrompt(s, character, scene1, scene2);
     console.log('[MyMeme] Prompt:', prompt);
 
+    cancelledRef.current = false;
     try {
-      abortRef.current = new AbortController();
-      const resp = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: '',
-          params: { prompt, url: character.refUrl },
-        }),
-        signal: abortRef.current.signal,
-      });
-
-      const data = await resp.json();
-      console.log('[MyMeme] Response:', data);
-      if (data.code === 200 && data.url) {
-        playSuccess();
-        setResultImage(data.url);
-        setPhase('result');
-        startCooldown();
-      } else if (data.code === 429) {
-        throw new Error('Too fast! Please wait ~60s and try again.');
-      } else {
-        throw new Error(data.message || `API error code: ${data.code}`);
-      }
+      const url = await generate({ prompt, ref_url: character.refUrl });
+      if (cancelledRef.current) return;
+      console.log('[MyMeme] Result:', url);
+      playSuccess();
+      setResultImage(url);
+      setPhase('result');
+      startCooldown();
     } catch (err: unknown) {
-      if (err instanceof Error && err.name === 'AbortError') return;
-      const msg = err instanceof Error ? err.message : 'Generation failed';
+      if (cancelledRef.current) return;
+      const raw = err instanceof Error ? err.message : 'Generation failed';
+      // Upstream (wdabuliu) enforces ~60s/IP — surface that to the player.
+      const msg = /HTTP 429/.test(raw) ? 'Too fast! Please wait ~60s and try again.' : raw;
       playError();
       console.error('[MyMeme] Error:', msg);
       setError(msg);
@@ -189,11 +180,11 @@ export function useMyMeme() {
     } finally {
       setGenerating(false);
     }
-  }, [selectedStyle, character, buildPrompt, startCooldown]);
+  }, [selectedStyle, character, scene1, scene2, buildPrompt, startCooldown, generate]);
 
   // ── Navigation ──────────────────────────────────────
   const goHome = useCallback(() => {
-    abortRef.current?.abort();
+    cancelledRef.current = true;
     setPhase('home');
     setSelectedStyle(null);
     setScene1('');
