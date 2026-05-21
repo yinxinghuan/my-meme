@@ -16,7 +16,7 @@ export default function MyMeme() {
   const state = useMyMeme();
   const [splashDone, setSplashDone] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
-  const { isInAigram, submitScore, fetchGlobalLeaderboard, fetchFriendsLeaderboard } = useGameScore('my-meme');
+  const { isInAigram, submitScore, fetchLeaderboard } = useGameScore();
 
   // 每次生成成功后累计得分并提交
   useEffect(() => {
@@ -38,8 +38,7 @@ export default function MyMeme() {
           gameName="My Meme"
           isInAigram={isInAigram}
           onClose={() => setShowLeaderboard(false)}
-          fetchGlobal={fetchGlobalLeaderboard}
-          fetchFriends={fetchFriendsLeaderboard}
+          fetch={fetchLeaderboard}
         />
       )}
 
