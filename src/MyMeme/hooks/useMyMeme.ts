@@ -26,7 +26,7 @@ const DEFAULT_CHARACTERS: Character[] = [
   { id: 'isabel', name: 'Isabel', avatar: avatarIsabel, refUrl: `${R2}/isabel.png` },
 ];
 
-const COOLDOWN_MS = 20000; // 20 seconds
+const COOLDOWN_MS = 2000; // 2 seconds (server rate limit is ~1s as of 2026-06-01; 2s adds jitter buffer + soft "don't spam regenerate" UX)
 
 /**
  * Convert Telegram user to Character
@@ -171,8 +171,8 @@ export function useMyMeme() {
     } catch (err: unknown) {
       if (cancelledRef.current) return;
       const raw = err instanceof Error ? err.message : 'Generation failed';
-      // Upstream (wdabuliu) enforces ~60s/IP — surface that to the player.
-      const msg = /HTTP 429/.test(raw) ? 'Too fast! Please wait ~60s and try again.' : raw;
+      // Upstream (wdabuliu) enforces ~1s/IP — surface that to the player.
+      const msg = /HTTP 429/.test(raw) ? 'Too fast! Wait a moment and try again.' : raw;
       playError();
       console.error('[MyMeme] Error:', msg);
       setError(msg);
