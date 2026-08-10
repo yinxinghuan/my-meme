@@ -68,7 +68,7 @@ export function getApiOrigin(): string | null {
  * Get Telegram ID from URL parameters
  * @returns Telegram ID or null if not found
  */
-export function getTelegramId(): string | null {
+export function telegramId: string | null {
   return getQueryParam('telegram_id');
 }
 
@@ -209,5 +209,5 @@ export async function getContactsList(
  * Check if APIs are available
  */
 export function isApiAvailable(): boolean {
-  return getApiOrigin() !== null && getTelegramId() !== null;
+  return getApiOrigin() !== null && telegramId !== null;
 }
