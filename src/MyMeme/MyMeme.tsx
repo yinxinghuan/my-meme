@@ -23,9 +23,9 @@ export default function MyMeme() {
     if (state.phase === 'result' && state.resultImage) {
       const text = (state.scene1 ?? '') + (state.scene2 ?? '');
       const earned = 50 + (text.length > 40 ? 30 : text.length >= 10 ? 15 : 0);
-      const prev = parseInt(localStorage.getItem(MM_SCORE_KEY) ?? '0', 10);
+      const prev = parseInt(alteruLocalStorage.getItem(MM_SCORE_KEY) ?? '0', 10);
       const total = prev + earned;
-      localStorage.setItem(MM_SCORE_KEY, String(total));
+      alteruLocalStorage.setItem(MM_SCORE_KEY, String(total));
       submitScore(total);
     }
   }, [state.phase, state.resultImage]);
